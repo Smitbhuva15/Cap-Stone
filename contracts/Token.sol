@@ -7,5 +7,6 @@ import "hardhat/console.sol";
 contract Token{
 
     string constant public name="Cap Token";  
+    string constant public symbol="CAP";
 
-}
+} 

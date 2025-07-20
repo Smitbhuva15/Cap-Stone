@@ -1,24 +1,27 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
+
+
 const tokenCount = (n) => {
   return ethers.utils.parseUnits(n.toString(), 'ether');
 }
 
 describe("Token", function () {
-  let token,account,deployer;
+  let token, deployer, receiver;
 
   beforeEach(async () => {
     const Token = await ethers.getContractFactory("Token");
     token = await Token.deploy("Cap Token", "CAP", 1000000);
-    signer=await ethers.getSigners();
-    deployer=signer[0];
+    signer = await ethers.getSigners();
+    deployer = signer[0];
+    receiver = signer[1];
   })
 
   describe("Deployment", () => {
-     
-    const _name="Cap Token";
-    const _symbol="CAP";
+
+    const _name = "Cap Token";
+    const _symbol = "CAP";
     const _totalsupply = tokenCount(1000000)
 
     it("has a correct name", async () => {
@@ -42,12 +45,45 @@ describe("Token", function () {
 
     })
 
-     it("At the Start assign all tokens to deployer", async () => {
+    it("At the Start assign all tokens to deployer", async () => {
       const tokens = await token.balanceOf(deployer.address);
       expect(tokens).to.equal(_totalsupply);
 
     })
   })
 
+  describe('sending Tokens', () => {
+    let amount;
+
+
+    //send token
+    it("Transfer Token Balances", async () => {
+      amount = tokenCount(100);
+
+
+      // send tokens
+      // if you write ------>token.connect(receiver).transfer(receiver.address, amount) , then  ----->     [msg.sender==receiver]
+
+      // if you write ------>token.transfer(receiver.address, amount), then ----->                         [msd.sender==deployer]  
+      // [contranct deployer==deployer]
+
+      // if you write ------>token.connect(deployer).transfer(receiver.address, amount) ,then ---->        [msg.sender==deployer]
+      // [contranct deployer==deployer]
+
+      // for constructor --->always --->    [msg.sender==contranct deployer==deployer]
+
+      let transaction = await token.connect(deployer).transfer(receiver.address, amount);
+
+      let result = transaction.wait();
+
+      expect(await token.balanceOf(deployer.address)).to.equal(tokenCount(999900));
+      expect(await token.balanceOf(receiver.address)).to.equal(amount);
+
+
+
+    })
+
+
+  })
 
 })

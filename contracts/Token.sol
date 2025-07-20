@@ -14,7 +14,7 @@ contract Token {
     uint256 public totalSupply;
 
     //mapping
-    mapping(address=>uint256) public balanceOf;
+    mapping(address => uint256) public balanceOf;
 
     constructor(
         string memory _name,
@@ -24,6 +24,18 @@ contract Token {
         name = _name;
         symbol = _symbol;
         totalSupply = _totalSupply * (10 ** decimal);
-        balanceOf[msg.sender]=totalSupply;
+        balanceOf[msg.sender] = totalSupply;
+    }
+
+    function transfer(
+        address _to,
+        uint256 _value
+    ) public {
+        // deduct token from sender;
+        balanceOf[msg.sender] = balanceOf[msg.sender] - _value;
+
+        // credit token to reciever
+        balanceOf[_to] =  balanceOf[_to] + _value;
+
     }
 }

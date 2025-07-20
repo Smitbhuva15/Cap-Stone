@@ -6,11 +6,13 @@ const tokenCount = (n) => {
 }
 
 describe("Token", function () {
-  let token;
+  let token,account,deployer;
 
   beforeEach(async () => {
     const Token = await ethers.getContractFactory("Token");
     token = await Token.deploy("Cap Token", "CAP", 1000000);
+    signer=await ethers.getSigners();
+    deployer=signer[0];
   })
 
   describe("Deployment", () => {
@@ -37,6 +39,12 @@ describe("Token", function () {
     it("has a correct totalSupply", async () => {
       const totalSupply = await token.totalSupply();
       expect(totalSupply).to.equal(_totalsupply);
+
+    })
+
+     it("At the Start assign all tokens to deployer", async () => {
+      const tokens = await token.balanceOf(deployer.address);
+      expect(tokens).to.equal(_totalsupply);
 
     })
   })

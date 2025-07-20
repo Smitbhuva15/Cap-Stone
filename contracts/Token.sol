@@ -13,6 +13,9 @@ contract Token {
     //Total supply
     uint256 public totalSupply;
 
+    //mapping
+    mapping(address=>uint256) public balanceOf;
+
     constructor(
         string memory _name,
         string memory _symbol,
@@ -21,5 +24,6 @@ contract Token {
         name = _name;
         symbol = _symbol;
         totalSupply = _totalSupply * (10 ** decimal);
+        balanceOf[msg.sender]=totalSupply;
     }
 }

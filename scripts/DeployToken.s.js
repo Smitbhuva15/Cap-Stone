@@ -7,6 +7,9 @@ async function main(){
   const token=await Token.deploy();
   await token.deployed();
   console.log(token.address);
+
+  const name=await token.name();
+  console.log(name);
   
 }
 

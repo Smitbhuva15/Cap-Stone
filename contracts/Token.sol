@@ -16,12 +16,12 @@ contract Token {
     //mapping
     mapping(address => uint256) public balanceOf;
 
-    mapping(address =>mapping(address=>uint256)) public allowance;
+    mapping(address => mapping(address => uint256)) public allowance;
 
     // events
 
     event Transfer(address indexed from, address indexed to, uint256 value);
-    event Apporove(address indexed from,address indexed to,uint256 value);
+    event Apporove(address indexed from, address indexed to, uint256 value);
 
     constructor(
         string memory _name,
@@ -38,29 +38,59 @@ contract Token {
         address _to,
         uint256 _value
     ) public returns (bool success) {
-
         //sender enough balance
-       require(balanceOf[msg.sender]>=_value,"insufficient balance");
-       require(_to!=address(0));
+        require(balanceOf[msg.sender] >= _value, "insufficient balance");
+        success = _transfer(msg.sender, _to, _value);
+        return success;
+    }
+
+    function _transfer(
+        address _from,
+        address _to,
+        uint256 _value
+    ) internal returns (bool success) {
+        require(_to != address(0));
 
         // deduct token from sender;
-        balanceOf[msg.sender] = balanceOf[msg.sender] - _value;
+        balanceOf[_from] = balanceOf[_from] - _value;
 
         // credit token to reciever
         balanceOf[_to] = balanceOf[_to] + _value;
 
         //emit events
-        emit Transfer(msg.sender, _to, _value);
-
+        emit Transfer(_from, _to, _value);
         return true;
     }
 
-    function approve(address _spender,uint256 value) public returns(bool success){
-        require(balanceOf[msg.sender]>=value);
-        require(_spender!=address(0));
-        allowance[msg.sender][_spender]=value;
+    function approve(
+        address _spender,
+        uint256 value
+    ) public returns (bool success) {
+        require(balanceOf[msg.sender] >= value);
+        require(_spender != address(0));
+        allowance[msg.sender][_spender] = value;
 
-        emit Apporove(msg.sender,_spender,value);
+        emit Apporove(msg.sender, _spender, value);
+        return true;
+    }
+
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _value
+    ) public returns (bool success) {
+        require(balanceOf[_from] >= _value);
+
+        //check approve
+        require(allowance[_from][msg.sender] >= _value);
+        require(_to != address(0));
+
+        // reset Allowance
+        allowance[_from][msg.sender] = allowance[_from][msg.sender] - _value;
+
+        // transfer token
+        _transfer(_from, _to, _value);
+
         return true;
     }
 }

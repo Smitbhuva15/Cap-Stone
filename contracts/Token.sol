@@ -16,6 +16,10 @@ contract Token {
     //mapping
     mapping(address => uint256) public balanceOf;
 
+    // events
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
     constructor(
         string memory _name,
         string memory _symbol,
@@ -30,12 +34,16 @@ contract Token {
     function transfer(
         address _to,
         uint256 _value
-    ) public {
+    ) public returns (bool success) {
         // deduct token from sender;
         balanceOf[msg.sender] = balanceOf[msg.sender] - _value;
 
         // credit token to reciever
-        balanceOf[_to] =  balanceOf[_to] + _value;
+        balanceOf[_to] = balanceOf[_to] + _value;
 
+        //emit events
+        emit Transfer(msg.sender, _to, _value);
+
+        return true;
     }
 }

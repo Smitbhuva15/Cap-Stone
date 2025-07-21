@@ -53,14 +53,9 @@ describe("Token", function () {
   })
 
   describe('sending Tokens', () => {
-    let amount;
-
-
-    //send token
-    it("Transfer Token Balances", async () => {
-      amount = tokenCount(100);
-
-
+    let amount, transaction,result;
+    
+    
       // send tokens
       // if you write ------>token.connect(receiver).transfer(receiver.address, amount) , then  ----->     [msg.sender==receiver]
 
@@ -70,16 +65,31 @@ describe("Token", function () {
       // if you write ------>token.connect(deployer).transfer(receiver.address, amount) ,then ---->        [msg.sender==deployer]
       // [contranct deployer==deployer]
 
-      // for constructor --->always --->    [msg.sender==contranct deployer==deployer]
+      // for constructor --->always --->    [msg.sender==contract deployer==deployer]
 
-      let transaction = await token.connect(deployer).transfer(receiver.address, amount);
+     
+    beforeEach(async()=>{
+      amount = tokenCount(100);
+      transaction = await token.connect(deployer).transfer(receiver.address, amount);
 
-      let result = transaction.wait();
+      result =await transaction.wait();
+    })
 
+    //send token
+    it("Transfer Token Balances", async () => {
+   
       expect(await token.balanceOf(deployer.address)).to.equal(tokenCount(999900));
       expect(await token.balanceOf(receiver.address)).to.equal(amount);
+    })
 
-
+    it("emit event",async()=>{
+    const event=result.events[0];
+    // console.log(event);
+    expect(event.event).to.equal("Transfer");
+    const args=event.args;
+    expect(args.from).to.equal(deployer.address);
+    expect(args.to).to.equal(receiver.address);
+    expect(args.value).to.equal(amount);
 
     })
 

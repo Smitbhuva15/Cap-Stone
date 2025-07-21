@@ -53,9 +53,11 @@ describe("Token", function () {
   })
 
   describe('sending Tokens', () => {
-    let amount, transaction,result;
-    
-    
+    let amount, transaction, result;
+
+
+    describe("Success", () => {
+
       // send tokens
       // if you write ------>token.connect(receiver).transfer(receiver.address, amount) , then  ----->     [msg.sender==receiver]
 
@@ -67,32 +69,48 @@ describe("Token", function () {
 
       // for constructor --->always --->    [msg.sender==contract deployer==deployer]
 
-     
-    beforeEach(async()=>{
-      amount = tokenCount(100);
-      transaction = await token.connect(deployer).transfer(receiver.address, amount);
+      beforeEach(async () => {
+        amount = tokenCount(100);
+        transaction = await token.connect(deployer).transfer(receiver.address, amount);
 
-      result =await transaction.wait();
+        result = await transaction.wait();
+      })
+
+      //send token
+      it("transfer Token Balances", async () => {
+
+        expect(await token.balanceOf(deployer.address)).to.equal(tokenCount(999900));
+        expect(await token.balanceOf(receiver.address)).to.equal(amount);
+      })
+
+      it("emit event", async () => {
+        const event = result.events[0];
+        // console.log(event);
+        expect(event.event).to.equal("Transfer");
+
+
+        const args = event.args;
+        expect(args.from).to.equal(deployer.address);
+        expect(args.to).to.equal(receiver.address);
+        expect(args.value).to.equal(amount);
+
+      })
+
     })
 
-    //send token
-    it("Transfer Token Balances", async () => {
-   
-      expect(await token.balanceOf(deployer.address)).to.equal(tokenCount(999900));
-      expect(await token.balanceOf(receiver.address)).to.equal(amount);
+   describe("Faliure",async ()=>{
+
+    it("reject insufficient balance",async()=>{
+      amount=tokenCount(10000000);
+      await expect(token.connect(deployer).transfer(receiver.address, amount)).to.be.reverted;
     })
 
-    it("emit event",async()=>{
-    const event=result.events[0];
-    // console.log(event);
-    expect(event.event).to.equal("Transfer");
-    const args=event.args;
-    expect(args.from).to.equal(deployer.address);
-    expect(args.to).to.equal(receiver.address);
-    expect(args.value).to.equal(amount);
-
+      it("reject insufficient address",async()=>{
+      amount=tokenCount(1000);
+      await expect(token.connect(deployer).transfer('0x0000000000000000000000000000000000000000', amount)).to.be.reverted;
     })
 
+   })
 
   })
 

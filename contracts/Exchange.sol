@@ -10,7 +10,16 @@ contract Exchange {
 
     /// mapping
 
-    mapping(address =>mapping(address=>uint256)) public tokens;
+    mapping(address => mapping(address => uint256)) public tokens;
+
+    // events
+
+    event Deposit(
+        address token,
+        address user,
+        uint256 amount,
+        uint256 balance
+    );
 
     constructor(address _feeAccount, uint256 _feePercent) {
         // fee Acoount is account,that get the all Transaction fees
@@ -21,7 +30,7 @@ contract Exchange {
 
     // deposite Token
 
-    function depositeToken(address _token, uint256 _amount) public {
+    function depositToken(address _token, uint256 _amount) public {
         // Transfer tokens to exchange(contract)
 
         ///////////////////////////////////////////////
@@ -36,7 +45,18 @@ contract Exchange {
 
         //update user balance
 
-        tokens[_token][msg.sender]=tokens[_token][msg.sender]+ _amount;
+        tokens[_token][msg.sender] = tokens[_token][msg.sender] + _amount;
+
         // emit event
+        emit Deposit(_token, msg.sender, _amount, tokens[_token][msg.sender]);
+    }
+
+    // check Balance
+
+    function balanceOf(
+        address _token,
+        address _user
+    ) public view returns (uint256) {
+        return tokens[_token][_user];
     }
 }

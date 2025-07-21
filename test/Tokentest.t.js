@@ -8,7 +8,7 @@ const tokenCount = (n) => {
 }
 
 describe("Token", function () {
-  let token, deployer, receiver;
+  let token, deployer, receiver, exchange;
 
   beforeEach(async () => {
     const Token = await ethers.getContractFactory("Token");
@@ -16,6 +16,7 @@ describe("Token", function () {
     signer = await ethers.getSigners();
     deployer = signer[0];
     receiver = signer[1];
+    exchange = signer[2];
   })
 
   describe("Deployment", () => {
@@ -98,20 +99,54 @@ describe("Token", function () {
 
     })
 
-   describe("Faliure",async ()=>{
+    describe("Faliure", async () => {
 
-    it("reject insufficient balance",async()=>{
-      amount=tokenCount(10000000);
-      await expect(token.connect(deployer).transfer(receiver.address, amount)).to.be.reverted;
+
+      it("reject insufficient balance", async () => {
+        amount = tokenCount(10000000);
+        await expect(token.connect(deployer).transfer(receiver.address, amount)).to.be.reverted;
+      })
+
+      it("reject insufficient address", async () => {
+        amount = tokenCount(1000);
+        await expect(token.connect(deployer).transfer('0x0000000000000000000000000000000000000000', amount)).to.be.reverted;
+      })
+
     })
 
-      it("reject insufficient address",async()=>{
-      amount=tokenCount(1000);
-      await expect(token.connect(deployer).transfer('0x0000000000000000000000000000000000000000', amount)).to.be.reverted;
+  })
+
+  describe("Approve Tokens", () => {
+    let amount, transaction, result;
+
+   
+
+    describe("success", () => {
+
+       beforeEach(async () => {
+      amount = tokenCount(100);
+      transaction = await token.connect(deployer).approve(exchange.address, amount);
+      result = await transaction.wait();
     })
 
-   })
+      it("allownace for transfer tokens", async () => {
+        const allowToken= await token.allowance(deployer.address,exchange.address);
+        expect(allowToken).to.equal(amount);
+      })
+    })
 
+
+    describe("failure", () => {
+      it("reject insufficient balance for apporove", async () => {
+        amount = tokenCount(10000000);
+        await expect(token.connect(deployer).approve(exchange.address, amount)).to.be.reverted;
+      })
+
+      it("reject insufficient address for apporove", async () => {
+        amount = tokenCount(1000);
+        await expect(token.connect(deployer).approve('0x0000000000000000000000000000000000000000', amount)).to.be.reverted;
+      })
+    })
   })
 
 })

@@ -315,20 +315,21 @@ describe("Exchange", () => {
 
 
 
-                // it('emits a make Cancel event', async () => {
-                //     const event = result.events[0]
-                //     expect(event.event).to.equal('Cancel')
+                it('emits Trade event', async () => {
+                    const event = result.events[0]
+                    expect(event.event).to.equal('Trade')
 
-                //     const args = event.args
-                //     expect(args.id).to.equal(1)
-                //     expect(args.user).to.equal(user1.address)
-                //     expect(args.tokenGet).to.equal(token2.address)
-                //     expect(args.amountGet).to.equal(amount)
-                //     expect(args.tokenGive).to.equal(token1.address)
-                //     expect(args.amountGive).to.equal(amount)
-                //     expect(args.timestamp).to.at.least(1)
+                    const args = event.args
+                    expect(args.id).to.equal(1)
+                    expect(args.user).to.equal(user2.address)
+                    expect(args.tokenGet).to.equal(token2.address)
+                    expect(args.amountGet).to.equal(amount)
+                    expect(args.tokenGive).to.equal(token1.address)
+                    expect(args.amountGive).to.equal(amount)
+                    expect(args.creator).to.equal(user1.address)
+                    expect(args.timestamp).to.at.least(1)
 
-                // })
+                })
             })
 
 

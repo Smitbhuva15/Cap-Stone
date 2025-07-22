@@ -45,6 +45,17 @@ contract Exchange {
         uint256 timestamp
     );
 
+      event Trade(
+        uint256 id,
+        address user,
+        address tokenGet,
+        uint256 amountGet,
+        address tokenGive,
+        uint256 amountGive,
+        address creator,
+        uint256 timestamp
+    );
+
     //////////////////////////      structure        //////////////////////////
 
     struct _Order {
@@ -229,5 +240,16 @@ contract Exchange {
         // user account
         tokens[_tokenGive][_user] = tokens[_tokenGive][_user] - _amountGive;
         tokens[_tokenGet][_user] = tokens[_tokenGet][_user] + _amountGet;
+
+      emit Trade(
+          _orderId,
+          msg.sender,
+         _tokenGet,
+         _amountGet,
+         _tokenGive,
+         _amountGive,
+         _user,
+         block.timestamp
+      );
     }
 }

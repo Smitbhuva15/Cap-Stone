@@ -7,15 +7,44 @@ import "./Token.sol";
 contract Exchange {
     address public feeAccount;
     uint256 public feePercent;
+    uint256 public orderCount = 0;
 
     /// mapping
 
     mapping(address => mapping(address => uint256)) public tokens;
+    mapping(uint256 => _Order) public orders;
 
     // events
 
     event Deposit(address token, address user, uint256 amount, uint256 balance);
-    event Withdraw(address token, address user, uint256 amount, uint256 balance);
+    event Withdraw(
+        address token,
+        address user,
+        uint256 amount,
+        uint256 balance
+    );
+
+    event Order(
+        uint256 id,
+        address user,
+        address tokenGet,
+        uint256 amountGet,
+        address tokenGive,
+        uint256 amountGive,
+        uint256 timestamp
+    );
+
+    //////////////////////////      structure        //////////////////////////
+
+    struct _Order {
+        uint256 id; // unique identity for order
+        address user; // User who made order
+        address tokenGet; // Address of token they receive
+        uint256 amountGet; // Amount they receive
+        address tokenGive; // Address of token they give
+        uint256 amountGive; // Amount they give
+        uint256 timestamp; // when order is created
+    }
 
     constructor(address _feeAccount, uint256 _feePercent) {
         // fee Acoount is account,that get the all Transaction fees
@@ -47,11 +76,10 @@ contract Exchange {
         emit Deposit(_token, msg.sender, _amount, tokens[_token][msg.sender]);
     }
 
-
-      // withdrawToken
+    // withdrawToken
 
     function withdrawToken(address _token, uint256 _amount) public {
-         require(tokens[_token][msg.sender]>=_amount);
+        require(tokens[_token][msg.sender] >= _amount);
 
         // Transfer token to user
         Token(_token).transfer(msg.sender, _amount);
@@ -60,7 +88,7 @@ contract Exchange {
         tokens[_token][msg.sender] = tokens[_token][msg.sender] - _amount;
 
         //emit event
-       emit Withdraw(_token,msg.sender, _amount, tokens[_token][msg.sender]);
+        emit Withdraw(_token, msg.sender, _amount, tokens[_token][msg.sender]);
     }
 
     // check Balance
@@ -72,5 +100,44 @@ contract Exchange {
         return tokens[_token][_user];
     }
 
-  
+    // Make and Cancel Orders
+
+    function makeOrder(
+        address _tokenGet,
+        uint256 _amountGet,
+        address _tokenGive,
+        uint256 _amountGive
+    ) public {
+        // token give(the token they want to spend)   (ex. rupees)
+        // token get(the token they want to receive) (ex. BSE stoke)
+        // _amountGive (ex. 300 rupess,CAP Token)
+        // _amountGet (ex. 2 quntity,mDAIT Token)
+
+        // prevent order if tokens are not on exchange
+        require(balanceOf(_tokenGive,msg.sender)>=_amountGive);
+
+        //create order
+        orderCount += 1;
+
+        //map order
+        orders[orderCount] = _Order(
+            orderCount,
+            msg.sender,
+            _tokenGet,
+            _amountGet,
+            _tokenGive,
+            _amountGive,
+            block.timestamp
+        );
+
+        emit Order(
+            orderCount,
+            msg.sender,
+            _tokenGet,
+            _amountGet,
+            _tokenGive,
+            _amountGive,
+            block.timestamp
+        );
+    }
 }

@@ -292,12 +292,11 @@ describe("Exchange", () => {
         describe("filling order", () => {
 
 
-            beforeEach(async () => {
-                transaction = await exchange.connect(user2).fillOrder(1);
-                result = await transaction.wait();
-            })
-
             describe('success', async () => {
+                beforeEach(async () => {
+                    transaction = await exchange.connect(user2).fillOrder(1);
+                    result = await transaction.wait();
+                })
                 it("Execute Fill order", async () => {
                     //user 2
                     expect(await exchange.balanceOf(token2.address, user2.address)).to.be.equal(tokenCount(0.9));
@@ -312,6 +311,7 @@ describe("Exchange", () => {
                     expect(await exchange.balanceOf(token2.address, feeAccount.address)).to.be.equal(tokenCount(0.1));
 
                 })
+
 
 
 
@@ -330,31 +330,50 @@ describe("Exchange", () => {
                     expect(args.timestamp).to.at.least(1)
 
                 })
+                it("update fillorder ", async () => {
+                    expect(await exchange.orderFilled(1)).to.equal(true);
+                })
             })
 
 
-            // describe('Failure', async () => {
-            //     beforeEach(async () => {
-            //         // user1 deposits tokens
-            //         transaction = await token1.connect(user1).approve(exchange.address, amount)
-            //         result = await transaction.wait()
-            //         transaction = await exchange.connect(user1).depositToken(token1.address, amount)
-            //         result = await transaction.wait()
-            //         // Make an order
-            //         transaction = await exchange.connect(user1).makeOrder(token2.address, amount, token1.address, amount)
-            //         result = await transaction.wait()
-            //     })
+            describe('Failure', async () => {
+                // beforeEach(async () => {
 
-            //     it('rejects invalid order ids', async () => {
-            //         const invalidOrderId = 99
-            //         await expect(exchange.connect(user1).cancelOrder(invalidOrderId)).to.be.reverted
-            //     })
+                //     // user1 deposits tokens
+                //     transaction = await token1.connect(user1).approve(exchange.address, amount)
+                //     result = await transaction.wait()
 
-            //     it('rejects unauthorized cancelations', async () => {
-            //         await expect(exchange.connect(user2).cancelOrder(1)).to.be.reverted
-            //     })
+                //     transaction = await exchange.connect(user1).depositToken(token1.address, amount)
+                //     result = await transaction.wait()
 
-            // })
+                //     // Make an order
+                //     transaction = await exchange.connect(user1).makeOrder(token2.address, amount, token1.address, amount)
+                //     result = await transaction.wait()
+                // })
+
+                it('rejects invalid order ids', async () => {
+                    const invalidOrderId = 99
+                    await expect(exchange.connect(user1).fillOrder(invalidOrderId)).to.be.reverted
+                })
+
+                it('rejects already cancel order', async () => {
+                    transaction = await exchange.connect(user1).cancelOrder(1);
+                    result = await transaction.wait();
+
+                    await expect(exchange.connect(user2).fillOrder(1)).to.be.reverted;
+                })
+
+
+                it('reject already filled order', async () => {
+                    transaction = await exchange.connect(user2).fillOrder(1);
+                    result = await transaction.wait();
+
+                    await expect(exchange.connect(user2).fillOrder(1)).to.be.reverted;
+
+                })
+
+
+            })
 
 
         })

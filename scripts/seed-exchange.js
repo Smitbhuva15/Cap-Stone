@@ -1,9 +1,15 @@
-import config from '../src/config.json'
+const config = require('../src/config.json')
 
 
 const tokens = (n) => {
     return ethers.utils.parseUnits(n.toString(), 'ether')
 }
+
+const wait = (seconds) => {
+  const milliseconds = seconds * 1000
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
 
 async function main() {
 
@@ -42,13 +48,13 @@ async function main() {
     const user2 = accounts[1]
     amount = tokens(10000)
 
-    // user1 approves 10,000 Dapp...
-    transaction = await DApp.connect(user1).approve(exchange.address, amount)
+    // user1 approves 10,000 CAP...
+    transaction = await CAP.connect(user1).approve(exchange.address, amount)
     await transaction.wait()
     console.log(`Approved ${amount} tokens from ${user1.address}`)
 
-    // user1 deposits 10,000 DApp...
-    transaction = await exchange.connect(user1).depositToken(DApp.address, amount)
+    // user1 deposits 10,000 CAP...
+    transaction = await exchange.connect(user1).depositToken(CAP.address, amount)
     await transaction.wait()
     console.log(`Deposited ${amount} Ether from ${user1.address}\n`)
 
@@ -62,4 +68,103 @@ async function main() {
     await transaction.wait()
     console.log(`Deposited ${amount} tokens from ${user2.address}\n`)
 
+
+    /////////////////////////   make and cancel order  ///////////////////////////////
+    // User 1 makes order to get tokens
+    let orderId
+    transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(100), CAP.address, tokens(5))
+    result = await transaction.wait()
+
+    // User 1 cancels order
+    orderId = result.events[0].args.id
+    transaction = await exchange.connect(user1).cancelOrder(orderId)
+    result = await transaction.wait()
+    console.log(`Cancelled order from ${user1.address}\n`)
+
+    // Wait 1 second
+    await wait(1)
+
+
+    ///////////////////   Seed Filled Orders  ////////////////////////////
+
+
+    // User 1 makes order
+    transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(100), CAP.address, tokens(10))
+    result = await transaction.wait()
+    console.log(`Made order from ${user1.address}`)
+
+    // User 2 fills order
+    orderId = result.events[0].args.id
+    transaction = await exchange.connect(user2).fillOrder(orderId)
+    result = await transaction.wait()
+    console.log(`Filled order from ${user1.address}\n`)
+
+    // Wait 1 second
+    await wait(1)
+
+
+    // Wait 1 second
+    await wait(1)
+
+    // User 1 makes another order
+    transaction = await exchange.makeOrder(mETH.address, tokens(50), CAP.address, tokens(15))
+    result = await transaction.wait()
+    console.log(`Made order from ${user1.address}`)
+
+    // User 2 fills another order
+    orderId = result.events[0].args.id
+    transaction = await exchange.connect(user2).fillOrder(orderId)
+    result = await transaction.wait()
+    console.log(`Filled order from ${user1.address}\n`)
+
+    // Wait 1 second
+    await wait(1)
+
+    // Wait 1 second
+    await wait(1)
+
+    // User 1 makes final order
+    transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(200), CAP.address, tokens(20))
+    result = await transaction.wait()
+    console.log(`Made order from ${user1.address}`)
+
+    // User 2 fills final order
+    orderId = result.events[0].args.id
+    transaction = await exchange.connect(user2).fillOrder(orderId)
+    result = await transaction.wait()
+    console.log(`Filled order from ${user1.address}\n`)
+
+    // Wait 1 second
+    await wait(1)
+
+
+    // User 1 makes 10 orders
+    for (let i = 1; i <= 10; i++) {
+        transaction = await exchange.connect(user1).makeOrder(mETH.address, tokens(10 * i), CAP.address, tokens(10))
+        result = await transaction.wait()
+
+        console.log(`Made order from ${user1.address}`)
+
+        // Wait 1 second
+        await wait(1)
+    }
+
+    // User 2 makes 10 orders
+    for (let i = 1; i <= 10; i++) {
+        transaction = await exchange.connect(user2).makeOrder(CAP.address, tokens(10), mETH.address, tokens(10 * i))
+        result = await transaction.wait()
+
+        console.log(`Made order from ${user2.address}`)
+
+        // Wait 1 second
+        await wait(1)
+    }
+
 }
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });

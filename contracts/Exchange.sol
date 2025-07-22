@@ -186,7 +186,7 @@ contract Exchange {
 
         // Excute
         _trade(
-            _order.orderId,
+            _order.id,
             _order.user,
             _order.tokenGet,
             _order.amountGet,
@@ -210,7 +210,7 @@ contract Exchange {
         //fee is deducted
 
         uint256 _feeAmount = (_amountGet * feePercent) / 100;
-
+     
         require(balanceOf(_tokenGet, msg.sender) >= _amountGet + _feeAmount);
         require(balanceOf(_tokenGive, _user) >= _amountGive);
 
@@ -219,16 +219,15 @@ contract Exchange {
             tokens[_tokenGet][msg.sender] -
             (_amountGet + _feeAmount);
         tokens[_tokenGive][msg.sender] =
-            tokens[_tokenGive][msg.sender] +
-            _amoutGive;
+            tokens[_tokenGive][msg.sender] + _amountGive;
 
 
         //charge fee
-         tokens[_tokenGet][feeAccount] = tokens[_tokenGet][feeAccount] + _amountGet;
+         tokens[_tokenGet][feeAccount] = tokens[_tokenGet][feeAccount] + _feeAmount;
         
 
         // user account
-        tokens[_tokenGive][_user] = tokens[_tokenGive][_user] - _amoutGive;
+        tokens[_tokenGive][_user] = tokens[_tokenGive][_user] - _amountGive;
         tokens[_tokenGet][_user] = tokens[_tokenGet][_user] + _amountGet;
     }
 }

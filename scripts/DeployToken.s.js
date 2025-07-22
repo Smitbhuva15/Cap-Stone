@@ -1,19 +1,35 @@
 
-async function main(){
+async function main() {
   // fetch contract
-  const Token=await ethers.getContractFactory("Token");
+  const Token = await ethers.getContractFactory("Token");
+  const Exchange = await ethers.getContractFactory("Exchange");
 
-  //deploy Contract
-  const token=await Token.deploy();
-  await token.deployed();
-  console.log(token.address);
+  //fetch Account
+  const account=await ethers.getSigners();
 
-  const name=await token.name();
-  console.log(name);
+  //deploy Cap Token Contract
+  const Cap = await Token.deploy("Cap Token", "CAP", 1000000);
+  await Cap.deployed();
+   console.log(`CAP Contract address: ${Cap.address}`)
+
+  //deploy mETH  Token Contract
+  const mETH = await Token.deploy('mETH', 'mETH', 1000000);
+  await mETH.deployed();
+ console.log(`mETH Contract address: ${mETH.address}`)
+
+  //deploy mETH  Token Contract
+  const mDAI =await Token.deploy("mDAI","mDAI",1000000);
+  await mDAI.deployed();
+  console.log(`mDAI Contract address: ${mDAI.address}`)
   
+  //deploy Exchange Contract
+  const exchange=await Exchange.deploy(account[0].address,10);
+  await exchange.deployed(); 
+   console.log(`Exchange Contract address: ${exchange.address}`)
+
 }
 
- main()
+main()
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);

@@ -141,6 +141,7 @@ contract Exchange {
             block.timestamp
         );
 
+        // emit event
         emit Order(
             orderCount,
             msg.sender,
@@ -175,5 +176,59 @@ contract Exchange {
             _order.amountGive,
             block.timestamp
         );
+    }
+
+    //Execute order
+
+    function fillOrder(uint256 id) public {
+        // fetch order
+        _Order storage _order = orders[id];
+
+        // Excute
+        _trade(
+            _order.orderId,
+            _order.user,
+            _order.tokenGet,
+            _order.amountGet,
+            _order.tokenGive,
+            _order.amountGive
+        );
+    }
+
+    function _trade(
+        uint256 _orderId,
+        address _user,
+        address _tokenGet,
+        uint256 _amountGet,
+        address _tokenGive,
+        uint256 _amountGive
+    ) internal {
+        // function call make(create) order --->user
+        // function call fill order ---> msg.sender
+        // user 2 is pay the fee(the person, who is filled the order)
+
+        //fee is deducted
+
+        uint256 _feeAmount = (_amountGet * feePercent) / 100;
+
+        require(balanceOf(_tokenGet, msg.sender) >= _amountGet + _feeAmount);
+        require(balanceOf(_tokenGive, _user) >= _amountGive);
+
+        // msg.sender account
+        tokens[_tokenGet][msg.sender] =
+            tokens[_tokenGet][msg.sender] -
+            (_amountGet + _feeAmount);
+        tokens[_tokenGive][msg.sender] =
+            tokens[_tokenGive][msg.sender] +
+            _amoutGive;
+
+
+        //charge fee
+         tokens[_tokenGet][feeAccount] = tokens[_tokenGet][feeAccount] + _amountGet;
+        
+
+        // user account
+        tokens[_tokenGive][_user] = tokens[_tokenGive][_user] - _amoutGive;
+        tokens[_tokenGet][_user] = tokens[_tokenGet][_user] + _amountGet;
     }
 }

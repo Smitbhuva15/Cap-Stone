@@ -1,18 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  token_contarct: {}
-}
+  token_contarct: {
+    contract: {},
+    symbol: ''
+  }
+};
 
 const TokenSlice = createSlice({
   name: 'token',
   initialState,
   reducers: {
-    getTokenContract(state, payload) {
-      state.token_contarct = payload.actions
-    },
-  },
-})
+    getTokenContract(state, action) {
+      state.token_contarct = action.payload;
+    }
+  }
+});
 
-export const { getTokenContract } = TokenSlice.actions
-export default TokenSlice.reducer
+export const { getTokenContract } = TokenSlice.actions;
+export default TokenSlice.reducer;

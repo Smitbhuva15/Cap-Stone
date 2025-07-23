@@ -7,8 +7,8 @@ import TokenAbi from './abis/TokenAbi.json'
 import GetAccount from './hooks/GetAccount'
 import GetProvider from './hooks/GetProvider'
 import {  useDispatch } from 'react-redux'
-import { getChainId, getProvider, getSigner } from './Slice/ProviderSlice'
 import { getTokenContract } from './Slice/TokenSlice'
+import { getChainId, getProvider, getSigner } from './Slice/ProviderSlice'
 
 
 function App() {
@@ -30,9 +30,12 @@ function App() {
     // console.log(chainId);
 
     const contractaddress = config[chainId].CAP.address;
+    // console.log(contractaddress)
     const contract = new ethers.Contract(contractaddress, TokenAbi, provider);
-    dispatch(getTokenContract(contract))
-    // console.log(contract)
+    const symbol=await contract.symbol();
+    
+    dispatch(getTokenContract({contract,symbol}))
+  
   }
 
   useEffect(() => {

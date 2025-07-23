@@ -10,14 +10,14 @@ const ProviderSlice = createSlice({
   name: 'provider',
   initialState,
   reducers: {
-    getSigner(state,payload){
-      state.signer=payload.actions;
+    getSigner(state,action){
+      state.signer=action.payload;
     },
-    getProvider(state,payload){
-        state.providerconnection=payload.actions;
+    getProvider(state,action){
+        state.providerconnection=action.payload;
     },
-    getChainId(state,payload){
-        state.chainId=payload.actions;
+    getChainId(state,action){
+        state.chainId=action.payload;
     }
   },
 })

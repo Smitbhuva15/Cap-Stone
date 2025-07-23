@@ -4,38 +4,33 @@ import './App.css'
 import { ethers } from 'ethers'
 import config from './config.json'
 import TokenAbi from './abis/TokenAbi.json'
-import GetAccount from './hooks/GetAccount'
-import GetProvider from './hooks/GetProvider'
-import {  useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getTokenContract } from './Slice/TokenSlice'
-import { getChainId, getProvider, getSigner } from './Slice/ProviderSlice'
+import { loadAccount, loadChainId, loadcontract, loadExhange, loadProvider } from './hooks/LoadData'
+
+
 
 
 function App() {
 
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
 
   const loadBlockchain = async () => {
 
-    const account = await GetAccount();
-     dispatch(getSigner(account[0]));
-    // console.log(account[0]);
-
-    const provider = GetProvider();
-    dispatch(getProvider(provider))
-    // console.log(provider)
-
-    const { chainId } = await provider.getNetwork();
-    dispatch(getChainId(chainId))
-    // console.log(chainId);
-
-    const contractaddress = config[chainId].CAP.address;
-    // console.log(contractaddress)
-    const contract = new ethers.Contract(contractaddress, TokenAbi, provider);
-    const symbol=await contract.symbol();
     
-    dispatch(getTokenContract({contract,symbol}))
-  
+    const provider = await loadProvider(dispatch);
+
+    const chainId = await loadChainId(dispatch, provider);
+    const account = await loadAccount(dispatch,provider);
+
+    // console.log(contractaddress)
+    const CAPaddress=config[chainId].CAP.address;
+    const mEthaddress=config[chainId].mETH.address;
+
+    const exchangeAddress=config[chainId].exchange.address;
+   await loadcontract (dispatch,[CAPaddress,mEthaddress],provider)
+   await loadExhange(dispatch, exchangeAddress,provider)
+
   }
 
   useEffect(() => {

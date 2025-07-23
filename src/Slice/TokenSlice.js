@@ -1,10 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  token_contarct: {
-    contract: {},
-    symbol: ''
-  }
+  token_contract: []
 };
 
 const TokenSlice = createSlice({
@@ -12,8 +9,9 @@ const TokenSlice = createSlice({
   initialState,
   reducers: {
     getTokenContract(state, action) {
-      state.token_contarct = action.payload;
+      state.token_contract.push(action.payload);
     }
+  
   }
 });
 

@@ -1,22 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = { value: 0 }
+const initialState = {
+  token_contarct: {}
+}
 
-const counterSlice = createSlice({
-  name: 'counter',
+const TokenSlice = createSlice({
+  name: 'token',
   initialState,
   reducers: {
-    increment(state) {
-      state.value++
-    },
-    decrement(state) {
-      state.value--
-    },
-    incrementByAmount(state, action) {
-      state.value += action.payload
+    getTokenContract(state, payload) {
+      state.token_contarct = payload.actions
     },
   },
 })
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
-export default counterSlice.reducer
+export const { getTokenContract } = TokenSlice.actions
+export default TokenSlice.reducer

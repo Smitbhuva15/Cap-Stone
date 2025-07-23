@@ -7,6 +7,7 @@ import TokenAbi from './abis/TokenAbi.json'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTokenContract } from './Slice/TokenSlice'
 import { loadAccount, loadChainId, loadcontract, loadExhange, loadProvider } from './hooks/LoadData'
+import Navbar from './components/Navbar'
 
 
 
@@ -38,9 +39,33 @@ function App() {
   }, [])
 
   return (
-    <>
-      hello
-    </>
+    <div>
+      <Navbar />
+
+         <main className='exchange grid'>
+        <section className='exchange__section--left grid'>
+
+          {/* Markets */}
+
+          {/* Balance */}
+
+          {/* Order */}
+
+        </section>
+        <section className='exchange__section--right grid'>
+
+          {/* PriceChart */}
+
+          {/* Transactions */}
+
+          {/* Trades */}
+
+          {/* OrderBook */}
+
+        </section>
+      </main>
+
+    </div>
   )
 }
 

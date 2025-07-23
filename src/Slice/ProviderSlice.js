@@ -21,7 +21,7 @@ const ProviderSlice = createSlice({
       state.chainId = action.payload;
     },
     getAccountBalance(state,action){
-      state.chainId=action.payload;
+      state.balance=action.payload;
     }
   },
 })

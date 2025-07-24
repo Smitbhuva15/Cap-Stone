@@ -18,19 +18,32 @@ function App() {
 
   const loadBlockchain = async () => {
 
-    
+    //connect ethers to blockchain
     const provider = await loadProvider(dispatch);
 
+    //fetch current netwotk chainid
     const chainId = await loadChainId(dispatch, provider);
-    const account = await loadAccount(dispatch,provider);
 
-    // console.log(contractaddress)
-    const CAPaddress=config[chainId].CAP.address;
-    const mEthaddress=config[chainId].mETH.address;
+    //reload the page when chainid is change
+    window.ethereum.on('chainChanged',()=>{
+      window.location.reload();
+    })
 
-    const exchangeAddress=config[chainId].exchange.address;
-   await loadcontract (dispatch,[CAPaddress,mEthaddress],provider)
-   await loadExhange(dispatch, exchangeAddress,provider)
+    //fetch current account and balance from metamask when changed
+    window.ethereum.on('accountsChanged', () => {
+      loadAccount(dispatch, provider);
+    })
+
+
+
+    const CAPaddress = config[chainId].CAP.address;
+    const mEthaddress = config[chainId].mETH.address;
+
+    const exchangeAddress = config[chainId].exchange.address;
+    // load token contract
+    await loadcontract(dispatch, [CAPaddress, mEthaddress], provider)
+    //load exchange contract
+    await loadExhange(dispatch, exchangeAddress, provider)
 
   }
 
@@ -42,7 +55,7 @@ function App() {
     <div>
       <Navbar />
 
-         <main className='exchange grid'>
+      <main className='exchange grid'>
         <section className='exchange__section--left grid'>
 
           {/* Markets */}

@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { loadAccount, loadChainId, loadcontract, loadExhange, loadProvider } from './hooks/LoadData'
 import Navbar from './components/Navbar'
 import Market from './components/Market'
+import Balance from './components/Balance'
 
 
 
@@ -59,7 +60,7 @@ function App() {
 
          <Market />
 
-          {/* Balance */}
+          <Balance />
 
           {/* Order */}
 

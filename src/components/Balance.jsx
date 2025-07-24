@@ -1,9 +1,10 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 
 const Balance = () => {
 
-
-
+  const token_contract= useSelector((state)=>state?.tokens?.token_contract)
+  console.log(token_contract)
 
     return (
         <div className='component exchange__transfers'>
@@ -19,7 +20,7 @@ const Balance = () => {
 
             <div className='exchange__transfers--form'>
                 <div className='flex-between'>
-
+                    <p><small>Token</small><br /><img src='./dapp.svg' alt="Token Logo" />CAP</p>
                 </div>
 
                 <form>

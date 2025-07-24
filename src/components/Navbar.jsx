@@ -7,10 +7,10 @@ import config from '../config.json'
 const Navbar = () => {
 
     const dispatch = useDispatch();
-    const account = useSelector((state) => state.provider.signer)
-    const balance = useSelector((state) => state.provider.balance)
-    const chainId = useSelector((state) => state.provider.chainId)
-    const provider = useSelector((state) => state.provider.providerconnection)
+    const account = useSelector((state) => state?.provider?.signer)
+    const balance = useSelector((state) => state?.provider?.balance)
+    const chainId = useSelector((state) => state?.provider?.chainId)
+    const provider = useSelector((state) => state?.provider?.providerconnection)
 
     const handelClick = async () => {
         const account = await loadAccount(dispatch, provider);

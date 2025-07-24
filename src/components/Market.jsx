@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loadcontract } from '../hooks/LoadData'
 
 const Market = () => {
-    const chainId = useSelector((state) => state.provider.chainId)
-    const provider = useSelector((state) => state.provider.providerconnection)
-    const token_contract = useSelector((state) => state.token.token_contract)
-    console.log(token_contract)
+    const chainId = useSelector((state) => state?.provider?.chainId)
+    const provider = useSelector((state) => state?.provider?.providerconnection)
+    const token_contract = useSelector((state) => state?.token?.token_contract)
+    
 
 
     const dispatch=useDispatch();

@@ -1,10 +1,28 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadbalance } from '../hooks/LoadData';
 
 const Balance = () => {
 
-  const token_contract= useSelector((state)=>state?.tokens?.token_contract)
-  console.log(token_contract)
+    const dispatch=useDispatch();
+
+    const token_contract = useSelector((state) => state?.token?.token_contract)
+    const exchange=useSelector((state) => state?.exchange?.Exchange_contract)
+    const  account = useSelector((state) => state?.provider?.signer)
+    const  chainId = useSelector((state) => state?.provider?.chainId)
+
+    const   tokenCAP_Balance = useSelector((state) => state?.token?.tokenCAP_Balance)
+    const  ExchangeCAP_Balance = useSelector((state) => state?.exchange?.ExchangeCAP_Balance)
+
+
+
+    useEffect(()=>{
+        if(token_contract && exchange && account){
+            loadbalance(dispatch,token_contract,exchange,account,chainId)
+        }
+    },[account,token_contract,exchange,chainId])
+
 
     return (
         <div className='component exchange__transfers'>
@@ -20,7 +38,9 @@ const Balance = () => {
 
             <div className='exchange__transfers--form'>
                 <div className='flex-between'>
-                    <p><small>Token</small><br /><img src='./dapp.svg' alt="Token Logo" />CAP</p>
+                    <p><small>Token</small><br /><img src='./dapp.svg' alt="Token Logo" />{token_contract[0]?.symbol1}</p>
+                     <p><small>Wallet</small><br />{ tokenCAP_Balance}</p>
+                     <p><small>Exchange</small><br />{ExchangeCAP_Balance}</p>
                 </div>
 
                 <form>
@@ -39,7 +59,7 @@ const Balance = () => {
 
             <div className='exchange__transfers--form'>
                 <div className='flex-between'>
-
+                    {token_contract[0]?.symbol2}
                 </div>
 
                 <form>

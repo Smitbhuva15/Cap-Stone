@@ -28,8 +28,8 @@ const Market = () => {
             {
                 chainId && config[chainId] ? (
                     <select name="markets" id="markets" onChange={marketHandler}>
-                        <option value={value1}>DApp / mETH</option>
-                        <option value={value2}>DApp / mDAI</option>
+                        <option value={value1}>CAP / mETH</option>
+                        <option value={value2}>CAP / mDAI</option>
                     </select>
                 ) : (
                     <p>Not Deployed to Network</p>

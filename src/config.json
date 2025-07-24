@@ -16,6 +16,18 @@
       "explorerURL": "#"
   },
    "11155111": {
+     "exchange": {
+      "address": "0xd6C0AF35De04ab1625242f9687f51Bfe08706E19"
+    },
+    "CAP": {
+      "address": "0x7d9FF3D02e689aa4605cE25F77F45E61bf6aDF36"
+    },
+    "mETH": {
+      "address": "0xCCe921Cc6ca004E2fd7Fd75fCE6960fb4Fe4F761"
+    },
+    "mDAI": {
+      "address": "0xF78d517715D55762266c13Cc1B74D589ba7C514E"
+    },
    "explorerURL": "https://sepolia.etherscan.io/"
   }
  

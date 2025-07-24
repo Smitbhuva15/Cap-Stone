@@ -1,13 +1,11 @@
 
 import { useEffect } from 'react'
 import './App.css'
-import { ethers } from 'ethers'
 import config from './config.json'
-import TokenAbi from './abis/TokenAbi.json'
-import { useDispatch, useSelector } from 'react-redux'
-import { getTokenContract } from './Slice/TokenSlice'
+import { useDispatch } from 'react-redux'
 import { loadAccount, loadChainId, loadcontract, loadExhange, loadProvider } from './hooks/LoadData'
 import Navbar from './components/Navbar'
+import Market from './components/Market'
 
 
 
@@ -39,6 +37,7 @@ function App() {
     const CAPaddress = config[chainId].CAP.address;
     const mEthaddress = config[chainId].mETH.address;
 
+
     const exchangeAddress = config[chainId].exchange.address;
     // load token contract
     await loadcontract(dispatch, [CAPaddress, mEthaddress], provider)
@@ -58,7 +57,7 @@ function App() {
       <main className='exchange grid'>
         <section className='exchange__section--left grid'>
 
-          {/* Markets */}
+         <Market />
 
           {/* Balance */}
 

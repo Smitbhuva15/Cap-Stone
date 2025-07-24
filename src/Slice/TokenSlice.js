@@ -9,7 +9,7 @@ const TokenSlice = createSlice({
   initialState,
   reducers: {
     getTokenContract(state, action) {
-      state.token_contract.push(action.payload);
+        state.token_contract = [action.payload];
     }
   
   }

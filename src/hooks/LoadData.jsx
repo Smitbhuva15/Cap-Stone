@@ -34,13 +34,12 @@ export const loadChainId = async (dispatch, provider) => {
 
 export const loadcontract = async (dispatch, contractaddress, provider) => {
 
-  let contract = new ethers.Contract(contractaddress[0], TokenAbi, provider);
-  let symbol = await contract.symbol();
-  dispatch(getTokenContract({ contract, symbol }))
+  let contract1 = new ethers.Contract(contractaddress[0], TokenAbi, provider);
+  let symbol1 = await contract1.symbol();
 
-  contract = new ethers.Contract(contractaddress[1], TokenAbi, provider);
-  symbol = await contract.symbol();
-  dispatch(getTokenContract({ contract, symbol }))
+  const contract2 = new ethers.Contract(contractaddress[1], TokenAbi, provider);
+  const symbol2 = await contract2.symbol();
+  dispatch(getTokenContract({contract1, contract2,symbol1, symbol2 }))
 }
 
 export const loadExhange = async (dispatch, contractaddress, provider) => {

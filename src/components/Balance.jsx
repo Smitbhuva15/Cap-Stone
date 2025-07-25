@@ -29,11 +29,21 @@ const Balance = () => {
     const handelsubmit = (e, tokenAddress) => {
         e.preventDefault();
         if (tokenAddress == token_contract[0]?.contract1?.address) {
-            transferTokens(dispatch, token_contract[0]?.contract1, token1Tranfer, providerconnection, exchange)
+            if (isDeposit) {
+                transferTokens(dispatch, token_contract[0]?.contract1, token1Tranfer, providerconnection, exchange, 'Deposit')
+            }
+            else {
+                transferTokens(dispatch, token_contract[0]?.contract1, token1Tranfer, providerconnection, exchange, 'Withdraw')
+            }
             setToken1Transfer(0);
         }
         else {
-            transferTokens(dispatch, token_contract[0]?.contract2, token2Tranfer, providerconnection, exchange)
+            if (isDeposit) {
+                transferTokens(dispatch, token_contract[0]?.contract2, token2Tranfer, providerconnection, exchange, 'Deposit')
+            }
+            else {
+                transferTokens(dispatch, token_contract[0]?.contract2, token2Tranfer, providerconnection, exchange, 'Withdraw')
+            }
             setToken2Transfer(0);
         }
 

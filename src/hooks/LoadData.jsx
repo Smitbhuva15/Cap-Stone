@@ -81,51 +81,77 @@ export const loadbalance = async (dispatch, contracts, exchange, account, chainI
 
 }
 
-export const transferTokens = async (dispatch, token, amount, provider, exchange) => {
+export const transferTokens = async (dispatch, token, amount, provider, exchange, action) => {
 
+    let transaction;
 
   const signer = await provider.getSigner();
   const amounttoTranfer = ethers.utils.parseEther(amount.toString(), 18);
-  toast('Approval pending...', {
-    icon: '⏳',
-  });
+  if (action === 'Deposit') {
+    toast('Approval pending...', {
+      icon: '⏳',
+    });
 
-  let transaction;
-  //approve amount
-  transaction = await token.connect(signer).approve(exchange.address, amounttoTranfer);
-  const approveReceipt = await transaction.wait();
+    //approve amount
+    transaction = await token.connect(signer).approve(exchange.address, amounttoTranfer);
+    const approveReceipt = await transaction.wait();
 
-  if (approveReceipt.status !== 1) {
-    toast.error("Approve transaction failed!")
-    return;
-  }
-  toast.success("Approval successful!")
-
-  toast('Deposit pending...', {
-    icon: '⏳',
-  });
-
-  // deposit amount
-  transaction = await exchange.connect(signer).depositToken(token.address, amounttoTranfer);
-  const depositReceipt = await transaction.wait();
-
-
-  if (depositReceipt.status !== 1) {
-    toast.error("Deposit transaction failed!")
-    return;
-  }
-  else if (depositReceipt.status === 1) {
-    const event = depositReceipt.events?.find(e => e.event === "Deposit");
-    if (event) {
-      const { amount } = event.args;
-      const formattedAmount = ethers.utils.formatEther(amount);
-      toast.success(` ${formattedAmount} tokens deposited successfully!`);
-      dispatch(getchangeEvent());
+    if (approveReceipt.status !== 1) {
+      toast.error("Approve transaction failed!")
+      return;
     }
-    else {
-      toast.error(" Deposit transaction failed!");
+    toast.success("Approval successful!")
+
+    toast('Deposit pending...', {
+      icon: '⏳',
+    });
+
+    // deposit amount
+    transaction = await exchange.connect(signer).depositToken(token.address, amounttoTranfer);
+    const depositReceipt = await transaction.wait();
+
+
+    if (depositReceipt.status !== 1) {
+      toast.error("Deposit transaction failed!")
+      return;
+    }
+    else if (depositReceipt.status === 1) {
+      const event = depositReceipt.events?.find(e => e.event === "Deposit");
+      if (event) {
+        const { amount } = event.args;
+        const formattedAmount = ethers.utils.formatEther(amount);
+        toast.success(` ${formattedAmount} tokens deposited successfully!`);
+        dispatch(getchangeEvent());
+      }
+      else {
+        toast.error(" Deposit transaction failed!");
+      }
     }
   }
+  else{
+    
+    // withdraw amount
+    transaction = await exchange.connect(signer).withdrawToken(token.address, amounttoTranfer);
+    const withdrawReceipt = await transaction.wait();
+       if (withdrawReceipt.status !== 1) {
+      toast.error(" withdrawReceipt  failed!")
+      return;
+    }
+    else if (withdrawReceipt.status === 1) {
+      const event =  withdrawReceipt.events?.find(e => e.event === "Withdraw");
+      if (event) {
+        const { amount } = event.args;
+        const formattedAmount = ethers.utils.formatEther(amount);
+        toast.success(` ${formattedAmount} tokens withdraw successfully!`);
+        dispatch(getchangeEvent());
+      }
+      else {
+        toast.error(" withdraw transaction failed!");
+      }
+    }
+
+  }
+
 
 }
 

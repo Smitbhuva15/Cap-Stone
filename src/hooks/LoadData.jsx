@@ -4,8 +4,10 @@ import { ethers, providers } from 'ethers'
 import { getTokenCAPBalance, getTokenContract, getTokenmDaiBalance, getTokenmEthBalance } from '../Slice/TokenSlice';
 import TokenAbi from '../abis/TokenAbi.json'
 import ExchangeAbi from '../abis/ExchangeAbi.json'
-import { getExchangeContract, getEXTokenCAPBalance, getEXTokenmDaiBalance, getEXTokenmEthBalance } from '../Slice/ExchangeSlice';
+import { getchangeEvent, getExchangeContract, getEXTokenCAPBalance, getEXTokenmDaiBalance, getEXTokenmEthBalance } from '../Slice/ExchangeSlice';
 import config from '../config.json'
+import toast from 'react-hot-toast';
+
 
 
 export const loadAccount = async (dispatch, provider) => {
@@ -50,28 +52,28 @@ export const loadExhange = async (dispatch, contractaddress, provider) => {
 
 }
 
-export const loadbalance = async (dispatch, contracts, exchange, account,chainId) => {
+export const loadbalance = async (dispatch, contracts, exchange, account, chainId) => {
   const CAP_Balance = await contracts[0]?.contract1?.balanceOf(account);
   const cap_balance = ethers.utils.formatEther(CAP_Balance)
   dispatch(getTokenCAPBalance(cap_balance))
 
-    const METH_Balance = await contracts[0]?.contract2?.balanceOf(account);
-    const mETH_balance = ethers.utils.formatEther(METH_Balance)
-    dispatch(getTokenmEthBalance(mETH_balance))
+  const METH_Balance = await contracts[0]?.contract2?.balanceOf(account);
+  const mETH_balance = ethers.utils.formatEther(METH_Balance)
+  dispatch(getTokenmEthBalance(mETH_balance))
 
-    const MDAI_Balance = await contracts[0]?.contract2?.balanceOf(account);
-    const mDAI_balance = ethers.utils.formatEther(MDAI_Balance)
-    dispatch(getTokenmDaiBalance(mDAI_balance))
-  
- const CAP_EXCHANGE_Balance = await exchange.balanceOf(config[chainId]?.CAP?.address,account);
+  const MDAI_Balance = await contracts[0]?.contract2?.balanceOf(account);
+  const mDAI_balance = ethers.utils.formatEther(MDAI_Balance)
+  dispatch(getTokenmDaiBalance(mDAI_balance))
+
+  const CAP_EXCHANGE_Balance = await exchange.balanceOf(config[chainId]?.CAP?.address, account);
   const cap_EXCHANGE_balance = ethers.utils.formatEther(CAP_EXCHANGE_Balance)
   dispatch(getEXTokenCAPBalance(cap_EXCHANGE_balance))
 
-  const MDAI_EXCHANGE_Balance = await exchange.balanceOf(config[chainId]?.mDAI?.address,account);
+  const MDAI_EXCHANGE_Balance = await exchange.balanceOf(config[chainId]?.mDAI?.address, account);
   const mDAI_EXCHANGE_balance = ethers.utils.formatEther(MDAI_EXCHANGE_Balance)
   dispatch(getEXTokenmDaiBalance(mDAI_EXCHANGE_balance))
 
-  const METH_EXCHANGE_Balance = await exchange.balanceOf(config[chainId]?.mETH?.address,account);
+  const METH_EXCHANGE_Balance = await exchange.balanceOf(config[chainId]?.mETH?.address, account);
   const mETH_EXCHANGE_balance = ethers.utils.formatEther(METH_EXCHANGE_Balance)
   dispatch(getEXTokenmEthBalance(mETH_EXCHANGE_balance))
 
@@ -79,17 +81,52 @@ export const loadbalance = async (dispatch, contracts, exchange, account,chainId
 
 }
 
-export const transferTokens=async(dispatch,token,amount,provider,exchange)=>{
+export const transferTokens = async (dispatch, token, amount, provider, exchange) => {
 
-  const signer=await provider.getSigner();
-   const amounttoTranfer=ethers.utils.parseEther(amount.toString(),18);
 
-   let transaction;
-   transaction=await token.connect(signer).approve(exchange.address,amounttoTranfer);
-   await transaction.wait();
+  const signer = await provider.getSigner();
+  const amounttoTranfer = ethers.utils.parseEther(amount.toString(), 18);
+  toast('Approval pending...', {
+    icon: '⏳',
+  });
 
-   transaction=await exchange.connect(signer).depositToken(token.address,amounttoTranfer);
-   await transaction.wait();
+  let transaction;
+  //approve amount
+  transaction = await token.connect(signer).approve(exchange.address, amounttoTranfer);
+  const approveReceipt = await transaction.wait();
+
+  if (approveReceipt.status !== 1) {
+    toast.error("Approve transaction failed!")
+    return;
+  }
+  toast.success("Approval successful!")
+
+  toast('Deposit pending...', {
+    icon: '⏳',
+  });
+
+  // deposit amount
+  transaction = await exchange.connect(signer).depositToken(token.address, amounttoTranfer);
+  const depositReceipt = await transaction.wait();
+
+
+  if (depositReceipt.status !== 1) {
+    toast.error("Deposit transaction failed!")
+    return;
+  }
+  else if (depositReceipt.status === 1) {
+    const event = depositReceipt.events?.find(e => e.event === "Deposit");
+    if (event) {
+      const { amount } = event.args;
+      const formattedAmount = ethers.utils.formatEther(amount);
+      toast.success(` ${formattedAmount} tokens deposited successfully!`);
+      dispatch(getchangeEvent());
+    }
+    else {
+      toast.error(" Deposit transaction failed!");
+    }
+  }
+
 }
 
 

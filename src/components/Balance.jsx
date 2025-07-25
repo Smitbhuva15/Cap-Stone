@@ -12,6 +12,7 @@ const Balance = () => {
     const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
     const account = useSelector((state) => state?.provider?.signer)
     const chainId = useSelector((state) => state?.provider?.chainId)
+    const event = useSelector((state) => state?.exchange?.event)
 
     const providerconnection = useSelector((state) => state.provider.providerconnection)
 
@@ -24,13 +25,14 @@ const Balance = () => {
         if (tokenAddress == token_contract[0].contract1.address) {
             transferTokens(dispatch, token_contract[0].contract1, token1Tranfer, providerconnection, exchange, account)
         }
+        setToken1Transfer(0);
     }
 
     useEffect(() => {
         if (token_contract && exchange && account) {
             loadbalance(dispatch, token_contract, exchange, account, chainId)
         }
-    }, [account, token_contract, exchange, chainId])
+    }, [account, token_contract, exchange, chainId,event])
 
 
     return (
@@ -54,7 +56,11 @@ const Balance = () => {
 
                 <form onSubmit={(e) => handelsubmit(e, token_contract[0].contract1.address)}>
                     <label htmlFor="token1"></label>
-                    <input type="text" id='token1' placeholder='0.0000'
+                    <input 
+                    type="text" 
+                    id='token1'
+                     placeholder='0.0000'
+                     value={token1Tranfer===0 ?'':token1Tranfer}
                         onChange={(e) => { setToken1Transfer(e.target.value) }} />
 
                     <button className='button' type='submit'>

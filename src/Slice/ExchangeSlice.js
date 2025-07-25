@@ -5,6 +5,7 @@ const initialState = {
   ExchangeCAP_Balance: 0,
   ExchangemDai_Balance: 0,
   ExchangemEth_Balance: 0,
+  event:true,
 };
 
 const ExchangeSlice = createSlice({
@@ -23,9 +24,12 @@ const ExchangeSlice = createSlice({
     getEXTokenCAPBalance(state, action) {
       state.ExchangeCAP_Balance = action.payload;
     },
+    getchangeEvent(state){
+      state.event=!state.event
+    }
 
   }
 });
 
-export const { getExchangeContract,getEXTokenmDaiBalance,getEXTokenmEthBalance,getEXTokenCAPBalance } = ExchangeSlice.actions;
+export const { getExchangeContract,getEXTokenmDaiBalance,getEXTokenmEthBalance,getEXTokenCAPBalance,getchangeEvent } = ExchangeSlice.actions;
 export default ExchangeSlice.reducer;

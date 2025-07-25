@@ -7,7 +7,7 @@ import { loadAccount, loadChainId, loadcontract, loadExhange, loadProvider } fro
 import Navbar from './components/Navbar'
 import Market from './components/Market'
 import Balance from './components/Balance'
-
+ import  { Toaster } from 'react-hot-toast';
 
 
 
@@ -24,7 +24,7 @@ function App() {
     const chainId = await loadChainId(dispatch, provider);
 
     //reload the page when chainid is change
-    window.ethereum.on('chainChanged',()=>{
+    window.ethereum.on('chainChanged', () => {
       window.location.reload();
     })
 
@@ -58,7 +58,7 @@ function App() {
       <main className='exchange grid'>
         <section className='exchange__section--left grid'>
 
-         <Market />
+          <Market />
 
           <Balance />
 
@@ -77,7 +77,10 @@ function App() {
 
         </section>
       </main>
-
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
     </div>
   )
 }

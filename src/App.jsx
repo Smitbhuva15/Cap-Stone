@@ -8,6 +8,7 @@ import Navbar from './components/Navbar'
 import Market from './components/Market'
 import Balance from './components/Balance'
  import  { Toaster } from 'react-hot-toast';
+import Order from './components/Order'
 
 
 
@@ -62,7 +63,7 @@ function App() {
 
           <Balance />
 
-          {/* Order */}
+          <Order />
 
         </section>
         <section className='exchange__section--right grid'>

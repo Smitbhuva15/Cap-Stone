@@ -1,10 +1,10 @@
 
 import { getAccountBalance, getChainId, getProvider, getSigner } from '../Slice/ProviderSlice';
-import { ethers } from 'ethers'
+import { ethers, providers } from 'ethers'
 import { getTokenCAPBalance, getTokenContract, getTokenmDaiBalance, getTokenmEthBalance } from '../Slice/TokenSlice';
 import TokenAbi from '../abis/TokenAbi.json'
 import ExchangeAbi from '../abis/ExchangeAbi.json'
-import { getExchangeContract, getEXTokenCAPBalance, getEXTokenmDaiBalance } from '../Slice/ExchangeSlice';
+import { getExchangeContract, getEXTokenCAPBalance, getEXTokenmDaiBalance, getEXTokenmEthBalance } from '../Slice/ExchangeSlice';
 import config from '../config.json'
 
 
@@ -73,10 +73,23 @@ export const loadbalance = async (dispatch, contracts, exchange, account,chainId
 
   const METH_EXCHANGE_Balance = await exchange.balanceOf(config[chainId]?.mETH?.address,account);
   const mETH_EXCHANGE_balance = ethers.utils.formatEther(METH_EXCHANGE_Balance)
-  dispatch(getEXTokenCAPBalance(mETH_EXCHANGE_balance))
+  dispatch(getEXTokenmEthBalance(mETH_EXCHANGE_balance))
 
 
 
+}
+
+export const transferTokens=async(dispatch,token,amount,provider,exchange)=>{
+
+  const signer=await provider.getSigner();
+   const amounttoTranfer=ethers.utils.parseEther(amount.toString(),18);
+
+   let transaction;
+   transaction=await token.connect(signer).approve(exchange.address,amounttoTranfer);
+   await transaction.wait();
+
+   transaction=await exchange.connect(signer).depositToken(token.address,amounttoTranfer);
+   await transaction.wait();
 }
 
 

@@ -1,27 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadbalance } from '../hooks/LoadData';
+import { loadbalance, transferTokens } from '../hooks/LoadData';
 
 const Balance = () => {
 
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
+    const [token1Tranfer, setToken1Transfer] = useState(0);
 
     const token_contract = useSelector((state) => state?.token?.token_contract)
-    const exchange=useSelector((state) => state?.exchange?.Exchange_contract)
-    const  account = useSelector((state) => state?.provider?.signer)
-    const  chainId = useSelector((state) => state?.provider?.chainId)
+    const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
+    const account = useSelector((state) => state?.provider?.signer)
+    const chainId = useSelector((state) => state?.provider?.chainId)
 
-    const   tokenCAP_Balance = useSelector((state) => state?.token?.tokenCAP_Balance)
-    const  ExchangeCAP_Balance = useSelector((state) => state?.exchange?.ExchangeCAP_Balance)
-
+    const providerconnection = useSelector((state) => state.provider.providerconnection)
 
 
-    useEffect(()=>{
-        if(token_contract && exchange && account){
-            loadbalance(dispatch,token_contract,exchange,account,chainId)
+    const tokenCAP_Balance = useSelector((state) => state?.token?.tokenCAP_Balance)
+    const ExchangeCAP_Balance = useSelector((state) => state?.exchange?.ExchangeCAP_Balance)
+
+    const handelsubmit = (e, tokenAddress) => {
+        e.preventDefault();
+        if (tokenAddress == token_contract[0].contract1.address) {
+            transferTokens(dispatch, token_contract[0].contract1, token1Tranfer, providerconnection, exchange, account)
         }
-    },[account,token_contract,exchange,chainId])
+    }
+
+    useEffect(() => {
+        if (token_contract && exchange && account) {
+            loadbalance(dispatch, token_contract, exchange, account, chainId)
+        }
+    }, [account, token_contract, exchange, chainId])
 
 
     return (
@@ -39,16 +48,17 @@ const Balance = () => {
             <div className='exchange__transfers--form'>
                 <div className='flex-between'>
                     <p><small>Token</small><br /><img src='./dapp.svg' alt="Token Logo" />{token_contract[0]?.symbol1}</p>
-                     <p><small>Wallet</small><br />{ tokenCAP_Balance}</p>
-                     <p><small>Exchange</small><br />{ExchangeCAP_Balance}</p>
+                    <p><small>Wallet</small><br />{tokenCAP_Balance}</p>
+                    <p><small>Exchange</small><br />{ExchangeCAP_Balance}</p>
                 </div>
 
-                <form>
+                <form onSubmit={(e) => handelsubmit(e, token_contract[0].contract1.address)}>
                     <label htmlFor="token1"></label>
-                    <input type="text" id='token1' placeholder='0.0000' />
+                    <input type="text" id='token1' placeholder='0.0000'
+                        onChange={(e) => { setToken1Transfer(e.target.value) }} />
 
                     <button className='button' type='submit'>
-                        <span></span>
+                        <span>Deposite</span>
                     </button>
                 </form>
             </div>

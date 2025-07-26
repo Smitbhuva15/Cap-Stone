@@ -10,6 +10,7 @@ import Balance from './components/Balance'
 import { Toaster } from 'react-hot-toast';
 import Order from './components/Order'
 import OrderBook from './components/OrderBook'
+import PriceChart from './components/PriceChart'
 
 
 
@@ -75,7 +76,7 @@ function App() {
         </section>
         <section className='exchange__section--right grid'>
 
-          {/* PriceChart */}
+         <PriceChart />
 
           {/* Transactions */}
 

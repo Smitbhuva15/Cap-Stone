@@ -1,22 +1,33 @@
 import React, { useState } from 'react'
+import { makeorder } from '../hooks/LoadData';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Order = () => {
+        const dispatch = useDispatch();
+    
     const [amount, setAmount] = useState(0);
     const [price, setPrice] = useState(0);
     const [isBuy, setIsBuy] = useState(true);
 
+        const token_contract = useSelector((state) => state?.token?.token_contract)
+        const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
+        const providerconnection = useSelector((state) => state?.provider?.providerconnection)
+
     const handelBuy = (e) => {
         e.preventDefault();
-        console.log("buy")
+        makeorder(dispatch, token_contract, {amount,price},providerconnection, exchange, 'Buy')
+        setAmount(0);
+        setPrice(0);
     }
 
     const handelSell = (e) => {
         e.preventDefault();
-        console.log("sell")
+          makeorder(dispatch, token_contract, {amount,price},providerconnection, exchange, 'Sell')
+        setAmount(0);
+        setPrice(0);
     }
     return (
 
-        
         <div className="component exchange__orders">
             <div className='component__header flex-between'>
                 <h2>New Order</h2>

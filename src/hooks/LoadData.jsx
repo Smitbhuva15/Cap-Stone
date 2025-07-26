@@ -83,7 +83,7 @@ export const loadbalance = async (dispatch, contracts, exchange, account, chainI
 
 export const transferTokens = async (dispatch, token, amount, provider, exchange, action) => {
 
-    let transaction;
+  let transaction;
 
   const signer = await provider.getSigner();
   const amounttoTranfer = ethers.utils.parseEther(amount.toString(), 18);
@@ -128,17 +128,17 @@ export const transferTokens = async (dispatch, token, amount, provider, exchange
       }
     }
   }
-  else{
-    
+  else {
+
     // withdraw amount
     transaction = await exchange.connect(signer).withdrawToken(token.address, amounttoTranfer);
     const withdrawReceipt = await transaction.wait();
-       if (withdrawReceipt.status !== 1) {
+    if (withdrawReceipt.status !== 1) {
       toast.error(" withdrawReceipt  failed!")
       return;
     }
     else if (withdrawReceipt.status === 1) {
-      const event =  withdrawReceipt.events?.find(e => e.event === "Withdraw");
+      const event = withdrawReceipt.events?.find(e => e.event === "Withdraw");
       if (event) {
         const { amount } = event.args;
         const formattedAmount = ethers.utils.formatEther(amount);
@@ -156,3 +156,31 @@ export const transferTokens = async (dispatch, token, amount, provider, exchange
 }
 
 
+export const makeorder = async (dispatch, token_contract, order, provider, exchange, action) => {
+
+  let transaction;
+
+  const signer = await provider.getSigner();
+
+  if (action == "Buy") {
+    const tokenGet = token_contract[0].contract1.address;
+    const amountGet = ethers.utils.parseEther((order.amount).toString(), 18);
+    const tokenGive = token_contract[0].contract2.address;
+    const amountGive = ethers.utils.parseEther((order.amount * order.price).toString(), 18);
+
+    transaction=await exchange.connect(signer).makeOrder(tokenGet,amountGet,tokenGive,amountGive);
+    const buyRecipt=await transaction.wait();
+   console.log(buyRecipt);
+  }
+  else {
+    const tokenGet = token_contract[0].contract2.address;
+    const amountGet = ethers.utils.parseEther((order.amount * order.price).toString(), 18);
+    const tokenGive = token_contract[0].contract1.address;
+    const amountGive = ethers.utils.parseEther((order.amount).toString(), 18);
+      transaction=await exchange.connect(signer).makeOrder(tokenGet,amountGet,tokenGive,amountGive);
+    const SellRecipt=await transaction.wait();
+   console.log( SellRecipt);
+  }
+
+
+}

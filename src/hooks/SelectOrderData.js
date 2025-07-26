@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import moment from 'moment'
 import config from '../config.json'
+import {  getbuyordermDAI, getbuyordermETH, getsellordermDAI, getsellordermETH } from "../Slice/ExchangeSlice";
 
 const SelectOrderData = (dispatch, token_contarct, Allorders, chainId) => {
 
@@ -19,18 +20,38 @@ const SelectOrderData = (dispatch, token_contarct, Allorders, chainId) => {
   // console.log(enhancedOrders)
 
   const addamount = decorateOrder(enhancedOrders, token_contarct, chainId);
-  console.log(addamount);
 
+  const buyordermETH = addamount.filter(
+    (order) => order.type === 'buy' && order.tokenName === 'mETH'
+  ).sort((a, b) =>  b.tokenPrice-a.tokenPrice);
+  dispatch(getbuyordermETH(buyordermETH));
+
+  const buyordermDAI = addamount.filter(
+    (order) => order.type === 'buy' && order.tokenName === 'mDAI'
+  ).sort((a, b) =>  b.tokenPrice-a.tokenPrice);
+  dispatch(getbuyordermDAI(buyordermDAI))
+
+  const sellordermETH = addamount.filter(
+    (order) => order.type === 'sell' && order.tokenName === 'mETH'
+  ).sort((a, b) =>  b.tokenPrice-a.tokenPrice);
+  dispatch(getsellordermETH(sellordermETH))
+
+  const sellordermDAI = addamount.filter(
+    (order) => order.type === 'sell' && order.tokenName === 'mDAI'
+  ).sort((a, b) =>  b.tokenPrice-a.tokenPrice);
+  dispatch(getsellordermDAI(sellordermDAI))
 
 
 }
 
 const decorateOrder = (enhancedOrders, token_contarct, chainId) => {
+  console.log(enhancedOrders)
   let token0Amount, token1Amount
 
   // Note: CAP should be considered token0, mETH is considered token1
   const addamounts = enhancedOrders.map(order => {
-    if (order.tokenGive === token_contarct[0].contract2.address) {
+    if (order.tokenGive === config[chainId].mETH.address || order.tokenGive ===  config[chainId].mDAI.address ) {
+ 
       token0Amount = order.amountGive // The amount of DApp we are giving
       token1Amount = order.amountGet // The amount of mETH we want...
     }
@@ -40,8 +61,15 @@ const decorateOrder = (enhancedOrders, token_contarct, chainId) => {
     }
 
     // Calculate token price to 5 decimal places
+    let tokenPrice;
     const precision = 100000
-    let tokenPrice = (token1Amount / token0Amount)
+    if(token0Amount._hex== "0x00" || token1Amount._hex=="0x00"){
+        tokenPrice = 0;
+    }
+    else{
+     tokenPrice = (token1Amount / token0Amount)
+
+    }
     tokenPrice = Math.round(tokenPrice * precision) / precision
 
 

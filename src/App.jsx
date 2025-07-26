@@ -16,6 +16,8 @@ import OrderBook from './components/OrderBook'
 function App() {
 
   const dispatch = useDispatch(); 
+  const eventfororders = useSelector((state) => state?.exchange?.eventfororders)
+
   
   const loadBlockchain = async () => {
 
@@ -48,13 +50,14 @@ function App() {
    const exchange= await loadExhange(dispatch, exchangeAddress, provider)
 
     // load all Orders
+    
     await loadAllOrder(dispatch,provider,exchange)
 
   }
 
   useEffect(() => {
     loadBlockchain();
-  }, [])
+  }, [eventfororders])
 
   return (
     <div>

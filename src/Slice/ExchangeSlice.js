@@ -6,7 +6,12 @@ const initialState = {
   ExchangemDai_Balance: 0,
   ExchangemEth_Balance: 0,
   event: true,
-  allOrders: []
+  allOrders: [],
+  buyordermETH:[],
+  buyordermDAI:[],
+  sellordermETH:[],
+  sellordermDAI:[],
+  eventfororders:true
 };
 
 const ExchangeSlice = createSlice({
@@ -33,16 +38,34 @@ const ExchangeSlice = createSlice({
       const newOrder = action.payload;
 
       // Check if order already exists
-     
-        const exists = state.allOrders.some(order => order.id._hex=== newOrder.id._hex);
-        if (!exists) {
-          state.allOrders.push(newOrder);
-        }
-     
-    }
+
+      const exists = state.allOrders.some(order => order.id._hex === newOrder.id._hex);
+      if (!exists) {
+        state.allOrders.push(newOrder);
+      }
+
+    },
+    getbuyordermETH(state,action){
+      state.buyordermETH=action.payload
+    },
+    getbuyordermDAI(state,action){
+      state.buyordermDAI=action.payload
+    },
+     getsellordermETH(state,action){
+      state.sellordermETH=action.payload
+    },
+     getsellordermDAI(state,action){
+      state.sellordermDAI=action.payload
+    },
+     getchangeEventforOrder(state) {
+      state.eventfororders = !state.eventfororders
+    },
+    
+
+
 
   }
 });
 
-export const { getExchangeContract, getEXTokenmDaiBalance, getEXTokenmEthBalance, getEXTokenCAPBalance, getchangeEvent, getallOrders } = ExchangeSlice.actions;
+export const { getExchangeContract, getEXTokenmDaiBalance, getEXTokenmEthBalance, getEXTokenCAPBalance, getchangeEvent, getallOrders,  getbuyordermETH, getbuyordermDAI,getsellordermETH,getsellordermDAI, getchangeEventforOrder} = ExchangeSlice.actions;
 export default ExchangeSlice.reducer;

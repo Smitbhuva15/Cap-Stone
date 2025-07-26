@@ -1,6 +1,10 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 
 const OrderBook = () => {
+
+     const orders = useSelector((state) => state?.exchange?.allOrders)
+     console.log(orders)
     return (
         <div className="component exchange__orderbook">
             <div className='component__header flex-between'>

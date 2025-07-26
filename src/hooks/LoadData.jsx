@@ -4,7 +4,7 @@ import { ethers, providers } from 'ethers'
 import { getTokenCAPBalance, getTokenContract, getTokenmDaiBalance, getTokenmEthBalance } from '../Slice/TokenSlice';
 import TokenAbi from '../abis/TokenAbi.json'
 import ExchangeAbi from '../abis/ExchangeAbi.json'
-import { getchangeEvent, getExchangeContract, getEXTokenCAPBalance, getEXTokenmDaiBalance, getEXTokenmEthBalance } from '../Slice/ExchangeSlice';
+import { getallOrders, getchangeEvent, getExchangeContract, getEXTokenCAPBalance, getEXTokenmDaiBalance, getEXTokenmEthBalance } from '../Slice/ExchangeSlice';
 import config from '../config.json'
 import toast from 'react-hot-toast';
 
@@ -49,6 +49,8 @@ export const loadExhange = async (dispatch, contractaddress, provider) => {
 
   let contract = new ethers.Contract(contractaddress, ExchangeAbi, provider);
   dispatch(getExchangeContract(contract))
+
+  return contract;
 
 }
 
@@ -171,6 +173,10 @@ export const makeorder = async (dispatch, token_contract, order, provider, excha
     transaction=await exchange.connect(signer).makeOrder(tokenGet,amountGet,tokenGive,amountGive);
     const buyRecipt=await transaction.wait();
    console.log(buyRecipt);
+   const block = await provider.getBlockNumber()
+    const tradeStream = await exchange.queryFilter('Order', 0, block)
+    console.log(tradeStream)
+
   }
   else {
     const tokenGet = token_contract[0].contract2.address;
@@ -183,4 +189,15 @@ export const makeorder = async (dispatch, token_contract, order, provider, excha
   }
 
 
+}
+
+export const loadAllOrder=async(dispatch,provider,exchange)=>{
+  // this function get all the orders  
+
+   const block = await provider.getBlockNumber()
+    const tradeStream = await exchange.queryFilter('Order', 0, block)
+    // console.log(tradeStream)
+    tradeStream.map(order=>dispatch(getallOrders(order.args)))
+    // dispatch(getallOrders(tradeStream.map(order=>console.log(order.args))))
+    
 }

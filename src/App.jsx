@@ -2,12 +2,12 @@
 import { useEffect } from 'react'
 import './App.css'
 import config from './config.json'
-import { useDispatch } from 'react-redux'
-import { loadAccount, loadChainId, loadcontract, loadExhange, loadProvider } from './hooks/LoadData'
+import { useDispatch, useSelector } from 'react-redux'
+import { loadAccount, loadAllOrder, loadChainId, loadcontract, loadExhange, loadProvider } from './hooks/LoadData'
 import Navbar from './components/Navbar'
 import Market from './components/Market'
 import Balance from './components/Balance'
- import  { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import Order from './components/Order'
 import OrderBook from './components/OrderBook'
 
@@ -15,8 +15,8 @@ import OrderBook from './components/OrderBook'
 
 function App() {
 
-  const dispatch = useDispatch();
-
+  const dispatch = useDispatch(); 
+  
   const loadBlockchain = async () => {
 
     //connect ethers to blockchain
@@ -45,7 +45,10 @@ function App() {
     // load token contract
     await loadcontract(dispatch, [CAPaddress, mEthaddress], provider)
     //load exchange contract
-    await loadExhange(dispatch, exchangeAddress, provider)
+   const exchange= await loadExhange(dispatch, exchangeAddress, provider)
+
+    // load all Orders
+    await loadAllOrder(dispatch,provider,exchange)
 
   }
 

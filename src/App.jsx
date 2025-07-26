@@ -9,6 +9,7 @@ import Market from './components/Market'
 import Balance from './components/Balance'
  import  { Toaster } from 'react-hot-toast';
 import Order from './components/Order'
+import OrderBook from './components/OrderBook'
 
 
 
@@ -74,7 +75,7 @@ function App() {
 
           {/* Trades */}
 
-          {/* OrderBook */}
+          <OrderBook />
 
         </section>
       </main>

@@ -30,8 +30,6 @@ const ExchangeSlice = createSlice({
     },
     getallOrders(state, action) {
 
-      // console.log(action.payload)
-
       const newOrder = action.payload;
 
       // Check if order already exists

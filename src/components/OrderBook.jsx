@@ -1,10 +1,23 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react'
+import SelectOrderData from '../hooks/SelectOrderData';
+
 
 const OrderBook = () => {
 
-     const orders = useSelector((state) => state?.exchange?.allOrders)
-     console.log(orders)
+    const dispatch = useDispatch();
+
+    const orders = useSelector((state) => state?.exchange?.allOrders)
+    const token_contract = useSelector((state) => state?.token?.token_contract)
+    const chainId = useSelector((state) => state?.provider?.chainId)
+    
+
+
+    useEffect(() => {
+        SelectOrderData(dispatch, token_contract,orders,chainId);
+    }, [orders])
+
     return (
         <div className="component exchange__orderbook">
             <div className='component__header flex-between'>

@@ -172,10 +172,6 @@ export const makeorder = async (dispatch, token_contract, order, provider, excha
 
     transaction=await exchange.connect(signer).makeOrder(tokenGet,amountGet,tokenGive,amountGive);
     const buyRecipt=await transaction.wait();
-   console.log(buyRecipt);
-   const block = await provider.getBlockNumber()
-    const tradeStream = await exchange.queryFilter('Order', 0, block)
-    console.log(tradeStream)
 
   }
   else {
@@ -183,21 +179,22 @@ export const makeorder = async (dispatch, token_contract, order, provider, excha
     const amountGet = ethers.utils.parseEther((order.amount * order.price).toString(), 18);
     const tokenGive = token_contract[0].contract1.address;
     const amountGive = ethers.utils.parseEther((order.amount).toString(), 18);
+
       transaction=await exchange.connect(signer).makeOrder(tokenGet,amountGet,tokenGive,amountGive);
     const SellRecipt=await transaction.wait();
-   console.log( SellRecipt);
+
   }
 
 
 }
 
 export const loadAllOrder=async(dispatch,provider,exchange)=>{
-  // this function get all the orders  
 
+  // this function get all the orders  
    const block = await provider.getBlockNumber()
-    const tradeStream = await exchange.queryFilter('Order', 0, block)
-    // console.log(tradeStream)
+   const tradeStream = await exchange.queryFilter('Order', 0, block)
+
     tradeStream.map(order=>dispatch(getallOrders(order.args)))
-    // dispatch(getallOrders(tradeStream.map(order=>console.log(order.args))))
+    
     
 }

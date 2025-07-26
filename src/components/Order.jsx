@@ -15,6 +15,8 @@ const Order = () => {
         console.log("sell")
     }
     return (
+
+        
         <div className="component exchange__orders">
             <div className='component__header flex-between'>
                 <h2>New Order</h2>

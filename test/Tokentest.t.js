@@ -42,6 +42,8 @@ describe("Token", function () {
 
     it("has a correct totalSupply", async () => {
       const totalSupply = await token.totalSupply();
+
+
       expect(totalSupply).to.be.equal(_totalsupply);
 
     })

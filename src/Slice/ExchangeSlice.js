@@ -9,10 +9,11 @@ const initialState = {
   allOrders: [],
   allCancelOrders: [],
   allFilledOrders: [],
-  buyorder:[],
-  sellorder:[],
-  eventfororders:true,
-  Mytransactions:[]
+  buyorder: [],
+  sellorder: [],
+  eventfororders: true,
+  Mytransactions: [],
+  TradeData:[]
 };
 
 const ExchangeSlice = createSlice({
@@ -46,19 +47,19 @@ const ExchangeSlice = createSlice({
       }
 
     },
-     getallCancelOrders(state, action) {
+    getallCancelOrders(state, action) {
 
       const newCancelOrder = action.payload;
 
       // Check if order already exists
 
-      const exists = state.allCancelOrders.some(order => order.id._hex ===newCancelOrder.id._hex);
+      const exists = state.allCancelOrders.some(order => order.id._hex === newCancelOrder.id._hex);
       if (!exists) {
         state.allCancelOrders.push(newCancelOrder);
       }
 
     },
-     getallFilledOrders(state, action) {
+    getallFilledOrders(state, action) {
 
       const newFilledOrder = action.payload;
 
@@ -70,18 +71,21 @@ const ExchangeSlice = createSlice({
       }
 
     },
-    getbuyorder(state,action){
-      state.buyorder=action.payload
+    getbuyorder(state, action) {
+      state.buyorder = action.payload
     },
 
-     getsellorder(state,action){
-      state.sellorder=action.payload
+    getsellorder(state, action) {
+      state.sellorder = action.payload
     },
-     getchangeEventforOrder(state) {
+    getchangeEventforOrder(state) {
       state.eventfororders = !state.eventfororders
     },
-    getMyTransactionData(state,action){
-      state.Mytransactions=action.payload;
+    getMyTransactionData(state, action) {
+      state.Mytransactions = action.payload;
+    },
+    getTradeData(state, action) {
+      state.TradeData = action.payload;
     }
 
 
@@ -89,5 +93,5 @@ const ExchangeSlice = createSlice({
   }
 });
 
-export const { getExchangeContract, getEXTokenmDaiBalance, getEXTokenmEthBalance, getEXTokenCAPBalance, getchangeEvent, getallOrders, getbuyorder,getsellorder, getchangeEventforOrder,getallFilledOrders,getallCancelOrders,getMyTransactionData} = ExchangeSlice.actions;
+export const { getExchangeContract, getEXTokenmDaiBalance, getEXTokenmEthBalance, getEXTokenCAPBalance, getchangeEvent, getallOrders, getbuyorder, getsellorder, getchangeEventforOrder, getallFilledOrders, getallCancelOrders, getMyTransactionData ,getTradeData} = ExchangeSlice.actions;
 export default ExchangeSlice.reducer;

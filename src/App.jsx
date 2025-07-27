@@ -12,6 +12,7 @@ import Order from './components/Order'
 import OrderBook from './components/OrderBook'
 import PriceChart from './components/PriceChart'
 import MyTransaction from './components/MyTransaction'
+import Trade from './components/Trade'
 
 
 
@@ -82,7 +83,7 @@ function App() {
 
           <MyTransaction />
 
-          {/* Trades */}
+          <Trade />
 
           <OrderBook />
 

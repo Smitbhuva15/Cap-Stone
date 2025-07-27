@@ -18,7 +18,7 @@ const OrderBook = () => {
 
     useEffect(() => {
         SelectOrderData(dispatch, token_contract, orders, allCancelOrders, allFilledOrders, chainId);
-    }, [orders])
+    }, [orders,allCancelOrders,allFilledOrders])
 
 
     return (
@@ -73,7 +73,7 @@ const OrderBook = () => {
 
                 <div className='divider'></div>
 
-                {!sellOrder || sellOrder?.length === 0 ? (
+                {!buyOrder || buyOrder?.length === 0 ? (
                     <p className="flex-center">No Buy Orders</p>
                 )
                     : (<table className='exchange__orderbook--buy'>

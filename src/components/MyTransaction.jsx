@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MyTransactionData } from '../hooks/SelectOrderData';
 import Banner from './Banner';
+import { cancelOrder, loadAllOrder } from '../hooks/LoadData';
 
 const MyTransaction = () => {
 
@@ -13,14 +14,24 @@ const MyTransaction = () => {
   const allFilledOrders = useSelector((state) => state?.exchange?.allFilledOrders)
   const account = useSelector((state) => state?.provider?.signer)
   const chainId = useSelector((state) => state?.provider?.chainId)
+  const provider = useSelector((state) => state?.provider?.providerconnection)
+  const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
+
+
 
 
   const Mytransactions = useSelector((state) => state?.exchange?.Mytransactions)
-console.log(Mytransactions)
+
 
   useEffect(() => {
     MyTransactionData(dispatch, token_contract, Allorders, allCancelOrders, allFilledOrders, account, chainId)
   }, [token_contract, Allorders, allCancelOrders, allFilledOrders, account, chainId]);
+
+  const handelCancelOrder = async (order) => {
+    await cancelOrder(order, exchange, provider);
+
+    await loadAllOrder(dispatch, provider, exchange)
+  }
 
   return (
     <div className="component exchange__transactions">
@@ -35,7 +46,7 @@ console.log(Mytransactions)
         </div>
 
 
-        {!Mytransactions || Mytransactions.length == 0   ? (
+        {!Mytransactions || Mytransactions.length == 0 ? (
           <Banner
             text='No Open Orders'
           />
@@ -44,23 +55,23 @@ console.log(Mytransactions)
             <thead>
               <tr>
                 <th>{token_contract[0]?.symbol1}<img src='./sort.svg' alt="Sort" /></th>
-                  <th>{token_contract[0]?.symbol1}/{token_contract[0]?.symbol2}<img src='./sort.svg' alt="Sort" /></th>
-                  <th></th>
+                <th>{token_contract[0]?.symbol1}/{token_contract[0]?.symbol2}<img src='./sort.svg' alt="Sort" /></th>
+                <th></th>
               </tr>
             </thead>
-           <tbody>
+            <tbody>
 
-                {Mytransactions && Mytransactions.map((order, index) => {
-                  return(
-                    <tr key={index}>
-                      <td style={{ color: `${order.tokenPriceclass}` }}>{order.token0Amount}</td>
-                      <td>{order.tokenPrice}</td>
-                      <td>{/* TODO: Cancel order */}</td>
-                    </tr>
-                  )
-                })}
+              {Mytransactions && Mytransactions.map((order, index) => {
+                return (
+                  <tr key={index}>
+                    <td style={{ color: `${order.tokenPriceclass}` }}>{order.token0Amount}</td>
+                    <td>{order.tokenPrice}</td>
+                    <td><button className='button--sm' onClick={() => handelCancelOrder(order)}>Cancel</button></td>
+                  </tr>
+                )
+              })}
 
-              </tbody>
+            </tbody>
           </table>
 
 

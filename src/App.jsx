@@ -11,6 +11,7 @@ import { Toaster } from 'react-hot-toast';
 import Order from './components/Order'
 import OrderBook from './components/OrderBook'
 import PriceChart from './components/PriceChart'
+import MyTransaction from './components/MyTransaction'
 
 
 
@@ -78,7 +79,7 @@ function App() {
 
          <PriceChart />
 
-          {/* Transactions */}
+          <MyTransaction />
 
           {/* Trades */}
 

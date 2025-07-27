@@ -4,7 +4,7 @@ import { ethers, providers } from 'ethers'
 import { getTokenCAPBalance, getTokenContract, getTokenmDaiBalance, getTokenmEthBalance } from '../Slice/TokenSlice';
 import TokenAbi from '../abis/TokenAbi.json'
 import ExchangeAbi from '../abis/ExchangeAbi.json'
-import { getallOrders, getchangeEvent, getchangeEventforOrder, getExchangeContract, getEXTokenCAPBalance, getEXTokenmDaiBalance, getEXTokenmEthBalance } from '../Slice/ExchangeSlice';
+import { getallCancelOrders, getallFilledOrders, getallOrders, getchangeEvent, getchangeEventforOrder, getExchangeContract, getEXTokenCAPBalance, getEXTokenmDaiBalance, getEXTokenmEthBalance } from '../Slice/ExchangeSlice';
 import config from '../config.json'
 import toast from 'react-hot-toast';
 
@@ -170,10 +170,10 @@ export const makeorder = async (dispatch, token_contract, order, provider, excha
     const tokenGive = token_contract[0].contract2.address;
     const amountGive = ethers.utils.parseEther((order.amount * order.price).toString(), 18);
 
-    transaction=await exchange.connect(signer).makeOrder(tokenGet,amountGet,tokenGive,amountGive);
-    const buyRecipt=await transaction.wait();
+    transaction = await exchange.connect(signer).makeOrder(tokenGet, amountGet, tokenGive, amountGive);
+    const buyRecipt = await transaction.wait();
 
-    dispatch( getchangeEventforOrder())
+    dispatch(getchangeEventforOrder())
 
   }
   else {
@@ -182,28 +182,30 @@ export const makeorder = async (dispatch, token_contract, order, provider, excha
     const tokenGive = token_contract[0].contract1.address;
     const amountGive = ethers.utils.parseEther((order.amount).toString(), 18);
 
-      transaction=await exchange.connect(signer).makeOrder(tokenGet,amountGet,tokenGive,amountGive);
-    const SellRecipt=await transaction.wait();
+    transaction = await exchange.connect(signer).makeOrder(tokenGet, amountGet, tokenGive, amountGive);
+    const SellRecipt = await transaction.wait();
 
-    dispatch( getchangeEventforOrder())
+    dispatch(getchangeEventforOrder())
   }
 
 
 }
 
-export const loadAllOrder=async(dispatch,provider,exchange)=>{
+export const loadAllOrder = async (dispatch, provider, exchange) => {
 
   // this function get all the orders  
-   const block = await provider.getBlockNumber()
-   const OrderStream = await exchange.queryFilter('Order', 0, block)
+  const block = await provider.getBlockNumber()
+  const OrderStream = await exchange.queryFilter('Order', 0, block)
 
-    
-   const CancelStream = await exchange.queryFilter('Cancel', 0, block)
 
-    
-   const tradeStream = await exchange.queryFilter('Trade', 0, block)
+  const CancelStream = await exchange.queryFilter('Cancel', 0, block)
 
-    OrderStream.map(order=>dispatch(getallOrders(order.args)))
-    
-    
+
+  const tradeStream = await exchange.queryFilter('Trade', 0, block)
+
+  OrderStream.map(order => dispatch(getallOrders(order.args)))
+  CancelStream.map(order => dispatch(getallCancelOrders(order.args)))
+  tradeStream.map(order => dispatch(getallFilledOrders(order.args)))
+
+
 }

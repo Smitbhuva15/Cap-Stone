@@ -12,10 +12,12 @@ const OrderBook = () => {
     const chainId = useSelector((state) => state?.provider?.chainId)
     const buyOrder = useSelector((state) => state?.exchange?.buyorder)
     const sellOrder = useSelector((state) => state?.exchange?.sellorder)
+    const allCancelOrders = useSelector((state) => state?.exchange?.allCancelOrders)
+    const allFilledOrders = useSelector((state) => state?.exchange?.allFilledOrders)
 
 
     useEffect(() => {
-        SelectOrderData(dispatch, token_contract, orders, chainId);
+        SelectOrderData(dispatch, token_contract, orders, allCancelOrders, allFilledOrders, chainId);
     }, [orders])
 
 

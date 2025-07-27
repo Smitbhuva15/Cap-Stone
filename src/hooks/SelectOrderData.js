@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import moment from 'moment'
 import config from '../config.json'
-import {  getbuyordermDAI, getbuyordermETH, getsellordermDAI, getsellordermETH } from "../Slice/ExchangeSlice";
+import {   getbuyorder, getsellorder } from "../Slice/ExchangeSlice";
 
 const SelectOrderData = (dispatch, token_contarct, Allorders, chainId) => {
 
@@ -9,7 +9,7 @@ const SelectOrderData = (dispatch, token_contarct, Allorders, chainId) => {
   const RED = '#F45353'
 
 
-  const enhancedOrders = Allorders.map(order => {
+  let enhancedOrders = Allorders.map(order => {
     if (order.tokenGet == token_contarct[0]?.contract1.address) {
       return { ...order, type: "buy", tokenPriceclass: GREEN };
     } else {
@@ -17,29 +17,30 @@ const SelectOrderData = (dispatch, token_contarct, Allorders, chainId) => {
     }
 
   });
-  // console.log(enhancedOrders)
+
+  // filter orders ---> mETH and mDAI
+enhancedOrders = enhancedOrders.filter(order =>
+  order.tokenGet === token_contarct[0].contract1.address ||
+  order.tokenGet === token_contarct[0].contract2.address
+);
+
+enhancedOrders = enhancedOrders.filter(order =>
+  order.tokenGive === token_contarct[0].contract1.address ||
+  order.tokenGive === token_contarct[0].contract2.address
+);
+
 
   const addamount = decorateOrder(enhancedOrders, token_contarct, chainId);
 
-  const buyordermETH = addamount.filter(
-    (order) => order.type === 'buy' && order.tokenName === 'mETH'
+  const buyorder = addamount.filter(
+    (order) => order.type === 'buy' 
   ).sort((a, b) =>  b.tokenPrice-a.tokenPrice);
-  dispatch(getbuyordermETH(buyordermETH));
+  dispatch(getbuyorder(buyorder));
 
-  const buyordermDAI = addamount.filter(
-    (order) => order.type === 'buy' && order.tokenName === 'mDAI'
+  const sellorder = addamount.filter(
+    (order) => order.type === 'sell' 
   ).sort((a, b) =>  b.tokenPrice-a.tokenPrice);
-  dispatch(getbuyordermDAI(buyordermDAI))
-
-  const sellordermETH = addamount.filter(
-    (order) => order.type === 'sell' && order.tokenName === 'mETH'
-  ).sort((a, b) =>  b.tokenPrice-a.tokenPrice);
-  dispatch(getsellordermETH(sellordermETH))
-
-  const sellordermDAI = addamount.filter(
-    (order) => order.type === 'sell' && order.tokenName === 'mDAI'
-  ).sort((a, b) =>  b.tokenPrice-a.tokenPrice);
-  dispatch(getsellordermDAI(sellordermDAI))
+  dispatch(getsellorder(sellorder))
 
 
 }

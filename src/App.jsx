@@ -58,7 +58,7 @@ function App() {
 
   useEffect(() => {
     loadBlockchain();
-  }, [eventfororders])
+  }, [])
 
   return (
     <div>

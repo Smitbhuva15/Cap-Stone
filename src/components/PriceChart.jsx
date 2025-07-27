@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import Banner from '../components/Banner'
 import Chart from 'react-apexcharts';
+import {series,options} from './PriceChart.config'
 
 const PriceChart = () => {
       const account = useSelector((state) => state?.provider?.signer)
@@ -27,8 +28,12 @@ const PriceChart = () => {
                 (
                     <Chart 
                     type='candlestick'
+                     series={series}
+                    options={options}
                     height="100%"
                     width="100%"
+                   
+
                     />
                 )
             }

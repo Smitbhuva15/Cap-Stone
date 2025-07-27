@@ -7,10 +7,8 @@ const initialState = {
   ExchangemEth_Balance: 0,
   event: true,
   allOrders: [],
-  buyordermETH:[],
-  buyordermDAI:[],
-  sellordermETH:[],
-  sellordermDAI:[],
+  buyorder:[],
+  sellorder:[],
   eventfororders:true
 };
 
@@ -45,17 +43,12 @@ const ExchangeSlice = createSlice({
       }
 
     },
-    getbuyordermETH(state,action){
-      state.buyordermETH=action.payload
+    getbuyorder(state,action){
+      state.buyorder=action.payload
     },
-    getbuyordermDAI(state,action){
-      state.buyordermDAI=action.payload
-    },
-     getsellordermETH(state,action){
-      state.sellordermETH=action.payload
-    },
-     getsellordermDAI(state,action){
-      state.sellordermDAI=action.payload
+
+     getsellorder(state,action){
+      state.sellorder=action.payload
     },
      getchangeEventforOrder(state) {
       state.eventfororders = !state.eventfororders
@@ -67,5 +60,5 @@ const ExchangeSlice = createSlice({
   }
 });
 
-export const { getExchangeContract, getEXTokenmDaiBalance, getEXTokenmEthBalance, getEXTokenCAPBalance, getchangeEvent, getallOrders,  getbuyordermETH, getbuyordermDAI,getsellordermETH,getsellordermDAI, getchangeEventforOrder} = ExchangeSlice.actions;
+export const { getExchangeContract, getEXTokenmDaiBalance, getEXTokenmEthBalance, getEXTokenCAPBalance, getchangeEvent, getallOrders, getbuyorder,getsellorder, getchangeEventforOrder} = ExchangeSlice.actions;
 export default ExchangeSlice.reducer;

@@ -1,30 +1,32 @@
 import React, { useState } from 'react'
-import { makeorder } from '../hooks/LoadData';
+import { loadAllOrder, makeorder } from '../hooks/LoadData';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Order = () => {
-        const dispatch = useDispatch();
-    
+    const dispatch = useDispatch();
+
     const [amount, setAmount] = useState(0);
     const [price, setPrice] = useState(0);
     const [isBuy, setIsBuy] = useState(true);
 
-        const token_contract = useSelector((state) => state?.token?.token_contract)
-        const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
-        const providerconnection = useSelector((state) => state?.provider?.providerconnection)
+    const token_contract = useSelector((state) => state?.token?.token_contract)
+    const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
+    const providerconnection = useSelector((state) => state?.provider?.providerconnection)
 
-    const handelBuy = (e) => {
+    const handelBuy = async (e) => {
         e.preventDefault();
-        makeorder(dispatch, token_contract, {amount,price},providerconnection, exchange, 'Buy')
+        await makeorder(dispatch, token_contract, { amount, price }, providerconnection, exchange, 'Buy')
         setAmount(0);
         setPrice(0);
+        await loadAllOrder(dispatch, providerconnection, exchange)
     }
 
-    const handelSell = (e) => {
+    const handelSell = async (e) => {
         e.preventDefault();
-          makeorder(dispatch, token_contract, {amount,price},providerconnection, exchange, 'Sell')
+        await makeorder(dispatch, token_contract, { amount, price }, providerconnection, exchange, 'Sell')
         setAmount(0);
         setPrice(0);
+        await loadAllOrder(dispatch, providerconnection, exchange)  
     }
     return (
 

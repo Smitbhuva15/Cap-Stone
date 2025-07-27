@@ -2,7 +2,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react'
 import SelectOrderData from '../hooks/SelectOrderData';
-import config from '../config.json'
 
 const OrderBook = () => {
 
@@ -11,25 +10,8 @@ const OrderBook = () => {
     const orders = useSelector((state) => state?.exchange?.allOrders)
     const token_contract = useSelector((state) => state?.token?.token_contract)
     const chainId = useSelector((state) => state?.provider?.chainId)
-    const buyordermETH = useSelector((state) => state?.exchange?.buyordermETH)
-    const buyordermDAI = useSelector((state) => state?.exchange?.buyordermDAI)
-    const sellordermETH = useSelector((state) => state?.exchange?.sellordermETH)
-    const sellordermDAI = useSelector((state) => state?.exchange?.sellordermDAI)
-
-    let sellOrder = [];
-    let buyOrder = [];
-
-    if (token_contract[0]?.contract2?.address === config[chainId]?.mETH?.address) {
-        sellOrder = sellordermETH;
-    } else {
-        sellOrder = sellordermDAI;
-    }
-
-    if (token_contract[0]?.contract2?.address === config[chainId]?.mETH?.address) {
-        buyOrder = buyordermETH;
-    } else {
-        buyOrder = buyordermDAI;
-    }
+    const buyOrder = useSelector((state) => state?.exchange?.buyorder)
+    const sellOrder = useSelector((state) => state?.exchange?.sellorder)
 
 
     useEffect(() => {

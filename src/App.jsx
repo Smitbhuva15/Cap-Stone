@@ -12,21 +12,13 @@ import Order from './components/Order'
 import OrderBook from './components/OrderBook'
 import PriceChart from './components/PriceChart'
 import MyTransaction from './components/MyTransaction'
-import { MyTransactionData } from './hooks/SelectOrderData'
+
 
 
 
 function App() {
 
   const dispatch = useDispatch();
-
-  const token_contract = useSelector((state) => state?.token?.token_contract)
-  const Allorders = useSelector((state) => state?.exchange?.allOrders)
-  const allCancelOrders = useSelector((state) => state?.exchange?.allCancelOrders)
-  const allFilledOrders = useSelector((state) => state?.exchange?.allFilledOrders)
-  const account = useSelector((state) => state?.provider?.signer)
-
-
 
   const loadBlockchain = async () => {
 
@@ -94,7 +86,10 @@ function App() {
 
           <OrderBook />
 
+         
+
         </section>
+
       </main>
       <Toaster
         position="top-center"

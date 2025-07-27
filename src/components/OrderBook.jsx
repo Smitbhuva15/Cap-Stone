@@ -2,6 +2,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react'
 import SelectOrderData from '../hooks/SelectOrderData';
+import { loadAllOrder, loadbalance, loadFilledOrder } from '../hooks/LoadData';
+import toast from 'react-hot-toast';
 
 const OrderBook = () => {
 
@@ -14,12 +16,25 @@ const OrderBook = () => {
     const sellOrder = useSelector((state) => state?.exchange?.sellorder)
     const allCancelOrders = useSelector((state) => state?.exchange?.allCancelOrders)
     const allFilledOrders = useSelector((state) => state?.exchange?.allFilledOrders)
+    const account = useSelector((state) => state?.provider?.signer)
+    const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
+    const provider = useSelector((state) => state?.provider?.providerconnection)
+
 
 
     useEffect(() => {
         SelectOrderData(dispatch, token_contract, orders, allCancelOrders, allFilledOrders, chainId);
-    }, [orders,allCancelOrders,allFilledOrders])
+    }, [orders, allCancelOrders, allFilledOrders])
 
+    const handelfilledOrder = async (order, action) => {
+        if (order.user.toLowerCase() === account.toLowerCase()) {
+            toast.error(`This is your own ${action} order. You cannot fill it.`);
+            return;
+        }
+        await loadFilledOrder(order, exchange, provider)
+        await loadAllOrder(dispatch, provider, exchange)
+        await loadbalance(dispatch, token_contract, exchange, account, chainId)
+    }
 
     return (
         <div className="component exchange__orderbook">
@@ -55,7 +70,7 @@ const OrderBook = () => {
                                 {
                                     sellOrder.map((order, index) => {
                                         return (
-                                            <tr key={index}>
+                                            <tr key={index} onClick={() => handelfilledOrder(order, "Sell")}>
                                                 <td>{order.token0Amount}</td>
                                                 <td style={{ color: order.tokenPriceclass }}>{order.tokenPrice}</td>
                                                 <td>{order.token1Amount}</td>
@@ -98,7 +113,7 @@ const OrderBook = () => {
                             {
                                 buyOrder.map((order, index) => {
                                     return (
-                                        <tr key={index}>
+                                        <tr key={index} onClick={() => handelfilledOrder(order, "Buy")}>
                                             <td>{order.token0Amount}</td>
                                             <td style={{ color: order.tokenPriceclass }}>{order.tokenPrice}</td>
                                             <td>{order.token1Amount}</td>

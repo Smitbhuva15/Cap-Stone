@@ -217,3 +217,9 @@ export const cancelOrder=async(order,exchange,provider)=>{
   let transaction =await exchange.connect(signer).cancelOrder(order.id);
   let result=await transaction.wait();
 }
+
+export const loadFilledOrder=async(order,exchange,provider)=>{
+  const signer=await provider.getSigner();
+  let transaction=await exchange.connect(signer).fillOrder(order.id);
+  let result=await transaction.wait();
+}

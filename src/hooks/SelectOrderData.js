@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import moment from 'moment'
 import config from '../config.json'
-import { getbuyorder, getMyTransactionData, getsellorder, getTradeData } from "../Slice/ExchangeSlice";
+import { getbuyorder, getMyTradeData, getMyTransactionData, getsellorder, getTradeData } from "../Slice/ExchangeSlice";
 import { useSelector } from "react-redux";
 
 
@@ -154,7 +154,7 @@ export const TradeOrders = async (fillOrder, token_contarct, chainId, dispatch) 
   );
 
 
- filledOrders= decorateOrder(filledOrders, token_contarct, chainId)
+  filledOrders = decorateOrder(filledOrders, token_contarct, chainId)
 
   // Sort orders by time ascending for price comparison
   filledOrders = filledOrders.sort((a, b) => a.timestamp - b.timestamp);
@@ -201,6 +201,60 @@ const tokenPriceClass = (tokenPrice, orderId, previousOrder) => {
   } else {
     return RED
   }
+}
+
+
+export const myTradeOrder = (dispatch, fillOrder, token_contarct, chainId, account) => {
+  let filledOrders;
+  // filter orders ---> mETH and mDAI
+  filledOrders = fillOrder.filter((o) => o.user.toLowerCase() === account.toLowerCase() || o.creator.toLowerCase() === account.toLowerCase())
+
+  filledOrders = filledOrders.filter(order =>
+    order.tokenGet === token_contarct[0].contract1.address ||
+    order.tokenGet === token_contarct[0].contract2.address
+  );
+
+  filledOrders = filledOrders.filter(order =>
+    order.tokenGive === token_contarct[0].contract1.address ||
+    order.tokenGive === token_contarct[0].contract2.address
+  );
+  console.log(filledOrders)
+
+
+  filledOrders = decorateOrder(filledOrders, token_contarct, chainId)
+
+  filledOrders = decorateMyTradeOrders(filledOrders, account, token_contarct);
+  // Sort orders by date descending for display
+  filledOrders = filledOrders.sort((a, b) => b.timestamp - a.timestamp);
+
+  dispatch(getMyTradeData(filledOrders));
+}
+
+const decorateMyTradeOrders = (orders, account, token_contarct) => {
+  return (
+    orders.map((order) => {
+      order = decorateMyTradeOrder(order, account, token_contarct)
+      return (order)
+    })
+  )
+}
+
+const decorateMyTradeOrder = (order, account, token_contarct) => {
+  const myOrder = order.creator.toLowerCase() === account.toLowerCase()
+
+  let orderType
+  if (myOrder) {
+    orderType = order.tokenGive === token_contarct[0].contract2.address ? 'buy' : 'sell'
+  } else {
+    orderType = order.tokenGive === token_contarct[0].contract2.address ? 'sell' : 'buy'
+  }
+
+  return ({
+    ...order,
+    orderType,
+    orderClass: (orderType === 'buy' ? GREEN : RED),
+    orderSign: (orderType === 'buy' ? '+' : '-')
+  })
 }
 
 

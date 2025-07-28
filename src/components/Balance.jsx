@@ -34,7 +34,7 @@ const Balance = () => {
         if (tokenAddress == token_contract[0]?.contract1?.address) {
 
             // if input ====> 0
-            if (token1Tranfer === 0) {
+            if (token1Tranfer == 0) {
                 toast.error("Please enter Valid number!!");
                 return;
             }
@@ -48,7 +48,7 @@ const Balance = () => {
         }
         else {
             // if input ====> 0
-            if (token2Tranfer === 0) {
+            if (token2Tranfer == 0) {
                 toast.error("Please enter Valid number!!")
                 return;
             }

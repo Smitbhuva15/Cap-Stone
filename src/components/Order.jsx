@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { loadAllOrder, makeorder } from '../hooks/LoadData';
 import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 
 const Order = () => {
     const dispatch = useDispatch();
@@ -12,10 +13,19 @@ const Order = () => {
     const token_contract = useSelector((state) => state?.token?.token_contract)
     const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
     const providerconnection = useSelector((state) => state?.provider?.providerconnection)
+    const ExchangeCAP_Balance = useSelector((state) => state?.exchange?.ExchangeCAP_Balance)
+    const ExchangemEth_Balance = useSelector((state) => state?.exchange?.ExchangemEth_Balance)
+    const ExchangemDai_Balance = useSelector((state) => state?.exchange?.ExchangemDai_Balance)
+    const chainId = useSelector((state) => state?.provider?.chainId)
 
     const handelBuy = async (e) => {
         e.preventDefault();
-        await makeorder(dispatch, token_contract, { amount, price }, providerconnection, exchange, 'Buy',account)
+
+        if (amount == 0 || price == 0) {
+            toast.error("Please enter Valid number!!");
+            return;
+        }
+        await makeorder(dispatch, token_contract, { amount, price }, providerconnection, exchange, 'Buy', account, ExchangeCAP_Balance, ExchangemEth_Balance, ExchangemDai_Balance, chainId)
         setAmount(0);
         setPrice(0);
         await loadAllOrder(dispatch, providerconnection, exchange)
@@ -23,10 +33,15 @@ const Order = () => {
 
     const handelSell = async (e) => {
         e.preventDefault();
-        await makeorder(dispatch, token_contract, { amount, price }, providerconnection, exchange, 'Sell',account)
+
+        if (amount === 0 || price === 0) {
+            toast.error("Please enter Valid number!!");
+            return;
+        }
+        await makeorder(dispatch, token_contract, { amount, price }, providerconnection, exchange, 'Sell', account, ExchangeCAP_Balance, ExchangemEth_Balance, ExchangemDai_Balance, chainId)
         setAmount(0);
         setPrice(0);
-        await loadAllOrder(dispatch, providerconnection, exchange)  
+        await loadAllOrder(dispatch, providerconnection, exchange)
     }
     return (
 

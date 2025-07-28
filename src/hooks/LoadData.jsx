@@ -160,7 +160,7 @@ export const transferTokens = async (dispatch, token, amount, provider, exchange
   else {
 
     // withdraw amount
-     toast('withdraw pending...', {
+    toast('withdraw pending...', {
       icon: '⏳',
     });
     transaction = await exchange.connect(signer).withdrawToken(token.address, amounttoTranfer);
@@ -188,32 +188,96 @@ export const transferTokens = async (dispatch, token, amount, provider, exchange
 }
 
 
-export const makeorder = async (dispatch, token_contract, order, provider, exchange, action) => {
+export const makeorder = async (dispatch, token_contract, order, provider, exchange, action, account, totalexchangeCAPBalance, totalexchangemETHBalance, totalexchangemDAIBalance, chainId) => {
 
   let transaction;
+  if (!account) {
+    toast.error("transaction failed! Please Connect with Metamask ");
+    return;
+  }
 
+  const amountNum = parseFloat(order.amount);
+  const amountPrice = parseFloat(order.price);
   const signer = await provider.getSigner();
 
   if (action == "Buy") {
+    const totalRequireBalance = amountNum * amountPrice * 1.0;
+
+    if (token_contract[0].contract2.address.toLowerCase() === config[chainId].mETH.address.toLowerCase()) {
+      if (totalRequireBalance > totalexchangemETHBalance) {
+        toast.error("Transaction failed! Insufficient contract mETH balance.");
+        return;
+      }
+
+    }
+    else {
+
+      if (totalRequireBalance > totalexchangemDAIBalance) {
+        toast.error("Transaction failed! Insufficient contract mDAI balance.");
+        return;
+      }
+    }
+
     const tokenGet = token_contract[0].contract1.address;
     const amountGet = ethers.utils.parseEther((order.amount).toString(), 18);
     const tokenGive = token_contract[0].contract2.address;
     const amountGive = ethers.utils.parseEther((order.amount * order.price).toString(), 18);
 
+    toast('Order pending...', {
+      icon: '⏳',
+    });
     transaction = await exchange.connect(signer).makeOrder(tokenGet, amountGet, tokenGive, amountGive);
     const buyRecipt = await transaction.wait();
+
+    if (buyRecipt.status !== 1) {
+      toast.error("Failed to place order. Please try again!")
+      return;
+    }
+    else if (buyRecipt.status === 1) {
+      const event = buyRecipt.events?.find(e => e.event === "Order");
+      if (event) {
+        toast.success('Your order has been successfully placed!');
+      }
+      else {
+        toast.error("Failed to place order. Please try again!")
+      }
+    }
 
     dispatch(getchangeEventforOrder())
 
   }
   else {
+
+    if (amountNum > totalexchangeCAPBalance) {
+      toast.error("Transaction failed! Insufficient contract CAP balance.");
+      return;
+    }
+
+
     const tokenGet = token_contract[0].contract2.address;
     const amountGet = ethers.utils.parseEther((order.amount * order.price).toString(), 18);
     const tokenGive = token_contract[0].contract1.address;
     const amountGive = ethers.utils.parseEther((order.amount).toString(), 18);
 
+    toast('Order pending...', {
+      icon: '⏳',
+    });
     transaction = await exchange.connect(signer).makeOrder(tokenGet, amountGet, tokenGive, amountGive);
     const SellRecipt = await transaction.wait();
+
+    if (SellRecipt.status !== 1) {
+      toast.error("Failed to place order. Please try again!")
+      return;
+    }
+    else if (SellRecipt.status === 1) {
+      const event = SellRecipt.events?.find(e => e.event === "Order");
+      if (event) {
+        toast.success('Your order has been successfully placed!');
+      }
+      else {
+        toast.error("Failed to place order. Please try again!")
+      }
+    }
 
     dispatch(getchangeEventforOrder())
   }

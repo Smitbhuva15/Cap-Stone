@@ -14,7 +14,8 @@ const initialState = {
   eventfororders: true,
   Mytransactions: [],
   TradeData:[],
-  MyTradeData:[]
+  MyTradeData:[],
+  seriesChartData:{}
 };
 
 const ExchangeSlice = createSlice({
@@ -90,6 +91,9 @@ const ExchangeSlice = createSlice({
     },
      getMyTradeData(state, action) {
       state.MyTradeData = action.payload;
+    },
+    getchartData(state,action){
+    state.seriesChartData=action.payload;
     }
 
 
@@ -97,5 +101,5 @@ const ExchangeSlice = createSlice({
   }
 });
 
-export const { getExchangeContract, getEXTokenmDaiBalance, getEXTokenmEthBalance, getEXTokenCAPBalance, getchangeEvent, getallOrders, getbuyorder, getsellorder, getchangeEventforOrder, getallFilledOrders, getallCancelOrders, getMyTransactionData ,getTradeData,getMyTradeData} = ExchangeSlice.actions;
+export const { getExchangeContract, getEXTokenmDaiBalance, getEXTokenmEthBalance, getEXTokenCAPBalance, getchangeEvent, getallOrders, getbuyorder, getsellorder, getchangeEventforOrder, getallFilledOrders, getallCancelOrders, getMyTransactionData ,getTradeData,getMyTradeData, getchartData} = ExchangeSlice.actions;
 export default ExchangeSlice.reducer;

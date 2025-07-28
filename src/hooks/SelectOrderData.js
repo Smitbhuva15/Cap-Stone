@@ -1,8 +1,9 @@
 import { ethers } from "ethers";
 import moment from 'moment'
 import config from '../config.json'
-import { getbuyorder, getMyTradeData, getMyTransactionData, getsellorder, getTradeData } from "../Slice/ExchangeSlice";
-import { useSelector } from "react-redux";
+import { getbuyorder, getchartData, getMyTradeData, getMyTransactionData, getsellorder, getTradeData } from "../Slice/ExchangeSlice";
+import {  groupBy, maxBy, minBy } from 'lodash';
+
 
 
 const GREEN = '#25CE8F'
@@ -22,14 +23,14 @@ const RejectOrder = (Allorders, allCancelOrders, allFilledOrders) => {
 }
 
 
-const SelectOrderData = (dispatch, token_contarct, Allorders, allCancelOrders, allFilledOrders, chainId) => {
+const SelectOrderData = (dispatch, token_contract, Allorders, allCancelOrders, allFilledOrders, chainId) => {
 
 
 
   let enhancedOrders = RejectOrder(Allorders, allCancelOrders, allFilledOrders)
 
   enhancedOrders = enhancedOrders.map(order => {
-    if (order.tokenGet == token_contarct[0]?.contract1.address) {
+    if (order.tokenGet == token_contract[0]?.contract1.address) {
       return { ...order, type: "buy", tokenPriceclass: GREEN };
     } else {
       return { ...order, type: "sell", tokenPriceclass: RED };
@@ -39,17 +40,17 @@ const SelectOrderData = (dispatch, token_contarct, Allorders, allCancelOrders, a
 
   // filter orders ---> mETH and mDAI
   enhancedOrders = enhancedOrders.filter(order =>
-    order.tokenGet === token_contarct[0].contract1.address ||
-    order.tokenGet === token_contarct[0].contract2.address
+    order.tokenGet === token_contract[0].contract1.address ||
+    order.tokenGet === token_contract[0].contract2.address
   );
 
   enhancedOrders = enhancedOrders.filter(order =>
-    order.tokenGive === token_contarct[0].contract1.address ||
-    order.tokenGive === token_contarct[0].contract2.address
+    order.tokenGive === token_contract[0].contract1.address ||
+    order.tokenGive === token_contract[0].contract2.address
   );
 
 
-  const addamount = decorateOrder(enhancedOrders, token_contarct, chainId);
+  const addamount = decorateOrder(enhancedOrders, token_contract, chainId);
 
   const buyorder = addamount.filter(
     (order) => order.type === 'buy'
@@ -65,7 +66,7 @@ const SelectOrderData = (dispatch, token_contarct, Allorders, allCancelOrders, a
 }
 
 
-const decorateOrder = (enhancedOrders, token_contarct, chainId) => {
+const decorateOrder = (enhancedOrders, token_contract, chainId) => {
 
   let token0Amount, token1Amount
 
@@ -106,7 +107,7 @@ const decorateOrder = (enhancedOrders, token_contarct, chainId) => {
   return addamounts;
 }
 
-export const MyTransactionData = (dispatch, token_contarct, Allorders, allCancelOrders, allFilledOrders, account, chainId) => {
+export const MyTransactionData = (dispatch, token_contract, Allorders, allCancelOrders, allFilledOrders, account, chainId) => {
 
 
   // Filter orders created by current account
@@ -116,18 +117,18 @@ export const MyTransactionData = (dispatch, token_contarct, Allorders, allCancel
 
   // Filter only relevant tokens (mETH and mDAI)
   enhancedOrders = enhancedOrders.filter(order =>
-    order.tokenGet === token_contarct[0].contract1.address ||
-    order.tokenGet === token_contarct[0].contract2.address
+    order.tokenGet === token_contract[0].contract1.address ||
+    order.tokenGet === token_contract[0].contract2.address
   );
 
   enhancedOrders = enhancedOrders.filter(order =>
-    order.tokenGive === token_contarct[0].contract1.address ||
-    order.tokenGive === token_contarct[0].contract2.address
+    order.tokenGive === token_contract[0].contract1.address ||
+    order.tokenGive === token_contract[0].contract2.address
   );
 
   // Tag orders as buy/sell and set color
   enhancedOrders = enhancedOrders.map(order => {
-    if (order.tokenGet === token_contarct[0]?.contract1.address) {
+    if (order.tokenGet === token_contract[0]?.contract1.address) {
       return { ...order, type: "buy", tokenPriceclass: GREEN };
     } else {
       return { ...order, type: "sell", tokenPriceclass: RED };
@@ -135,26 +136,26 @@ export const MyTransactionData = (dispatch, token_contarct, Allorders, allCancel
   });
 
 
-  enhancedOrders = decorateOrder(enhancedOrders, token_contarct, chainId);
+  enhancedOrders = decorateOrder(enhancedOrders, token_contract, chainId);
   enhancedOrders = enhancedOrders.sort((a, b) => b.timestamp - a.timestamp)
   dispatch(getMyTransactionData(enhancedOrders));
 };
 
-export const TradeOrders = async (fillOrder, token_contarct, chainId, dispatch) => {
+export const TradeOrders = async (fillOrder, token_contract, chainId, dispatch) => {
   let filledOrders;
   // filter orders ---> mETH and mDAI
   filledOrders = fillOrder.filter(order =>
-    order.tokenGet === token_contarct[0].contract1.address ||
-    order.tokenGet === token_contarct[0].contract2.address
+    order.tokenGet === token_contract[0].contract1.address ||
+    order.tokenGet === token_contract[0].contract2.address
   );
 
   filledOrders = filledOrders.filter(order =>
-    order.tokenGive === token_contarct[0].contract1.address ||
-    order.tokenGive === token_contarct[0].contract2.address
+    order.tokenGive === token_contract[0].contract1.address ||
+    order.tokenGive === token_contract[0].contract2.address
   );
 
 
-  filledOrders = decorateOrder(filledOrders, token_contarct, chainId)
+  filledOrders = decorateOrder(filledOrders, token_contract, chainId)
 
   // Sort orders by time ascending for price comparison
   filledOrders = filledOrders.sort((a, b) => a.timestamp - b.timestamp);
@@ -204,49 +205,50 @@ const tokenPriceClass = (tokenPrice, orderId, previousOrder) => {
 }
 
 
-export const myTradeOrder = (dispatch, fillOrder, token_contarct, chainId, account) => {
+export const myTradeOrder = (dispatch, fillOrder, token_contract, chainId, account) => {
   let filledOrders;
-  // filter orders ---> mETH and mDAI
+
   filledOrders = fillOrder.filter((o) => o.user.toLowerCase() === account.toLowerCase() || o.creator.toLowerCase() === account.toLowerCase())
 
+  // filter orders ---> mETH and mDAI
+
   filledOrders = filledOrders.filter(order =>
-    order.tokenGet === token_contarct[0].contract1.address ||
-    order.tokenGet === token_contarct[0].contract2.address
+    order.tokenGet === token_contract[0].contract1.address ||
+    order.tokenGet === token_contract[0].contract2.address
   );
 
   filledOrders = filledOrders.filter(order =>
-    order.tokenGive === token_contarct[0].contract1.address ||
-    order.tokenGive === token_contarct[0].contract2.address
+    order.tokenGive === token_contract[0].contract1.address ||
+    order.tokenGive === token_contract[0].contract2.address
   );
-  console.log(filledOrders)
 
 
-  filledOrders = decorateOrder(filledOrders, token_contarct, chainId)
+  filledOrders = decorateOrder(filledOrders, token_contract, chainId)
 
-  filledOrders = decorateMyTradeOrders(filledOrders, account, token_contarct);
+  filledOrders = decorateMyTradeOrders(filledOrders, account, token_contract);
   // Sort orders by date descending for display
   filledOrders = filledOrders.sort((a, b) => b.timestamp - a.timestamp);
 
   dispatch(getMyTradeData(filledOrders));
 }
 
-const decorateMyTradeOrders = (orders, account, token_contarct) => {
+const decorateMyTradeOrders = (orders, account, token_contract) => {
   return (
     orders.map((order) => {
-      order = decorateMyTradeOrder(order, account, token_contarct)
+      order = decorateMyTradeOrder(order, account, token_contract)
       return (order)
     })
   )
 }
 
-const decorateMyTradeOrder = (order, account, token_contarct) => {
+const decorateMyTradeOrder = (order, account, token_contract) => {
   const myOrder = order.creator.toLowerCase() === account.toLowerCase()
 
   let orderType
   if (myOrder) {
-    orderType = order.tokenGive === token_contarct[0].contract2.address ? 'buy' : 'sell'
+    orderType = order.tokenGive === token_contract[0].contract2.address ? 'buy' : 'sell'
   } else {
-    orderType = order.tokenGive === token_contarct[0].contract2.address ? 'sell' : 'buy'
+    orderType = order.tokenGive === token_contract[0].contract2.address ? 'sell' : 'buy'
   }
 
   return ({
@@ -257,5 +259,73 @@ const decorateMyTradeOrder = (order, account, token_contarct) => {
   })
 }
 
+export const seriesChart = ( dispatch,fillOrder, token_contract,chainId) => {
+  let filledOrders;
+
+  // filter orders ---> mETH and mDAI
+
+  filledOrders = fillOrder.filter(order =>
+    order.tokenGet === token_contract[0].contract1.address ||
+    order.tokenGet === token_contract[0].contract2.address
+  );
+
+  filledOrders = filledOrders.filter(order =>
+    order.tokenGive === token_contract[0].contract1.address ||
+    order.tokenGive === token_contract[0].contract2.address
+  );
+
+  // Sort orders by date ascending to compare history
+  filledOrders = filledOrders.sort((a, b) => a.timestamp - b.timestamp);
+
+  filledOrders = decorateOrder(filledOrders, token_contract, chainId)
+
+  // Get last 2 order for final price & price change
+  let secondlastOrderPrice = filledOrders[filledOrders.length - 1]?.tokenPrice;
+  let lastOrderPrice = filledOrders[filledOrders.length - 2]?.tokenPrice;
+
+ 
+
+  dispatch( getchartData({
+    lastOrderPrice,
+    lastorderSign: secondlastOrderPrice <= lastOrderPrice ? "+" : "-",
+    series: [{
+      data: buildGraphData(filledOrders)
+    }]
+  }))
+
+}
+
+
+const buildGraphData = (orders) => {
+  // Group the orders by **day**
+  const groupedByDay = groupBy(orders, (o) =>
+    moment.unix(o.timestamp).startOf('day').format()
+  );
+
+  // Get each day where data exists
+  const days = Object.keys(groupedByDay);
+
+  // Build the graph series
+  const graphData = days.map((day) => {
+    const group = groupedByDay[day];
+
+    // Sort the group by timestamp to ensure correct open/close
+    const sortedGroup = group.sort((a, b) => a.timestamp - b.timestamp);
+
+    const prices = group.map((o) => o.tokenPrice);
+
+    return {
+      x: new Date(day), // x-axis: day
+      y: [
+        sortedGroup[0].tokenPrice,               // Open
+        Math.max(...prices),                     // High
+        Math.min(...prices),                     // Low
+        sortedGroup[sortedGroup.length - 1].tokenPrice // Close
+      ]
+    };
+  });
+
+  return graphData;
+};
 
 export default SelectOrderData

@@ -6,11 +6,11 @@ export const options = {
   },
   tooltip: {
     enabled: true,
-    theme: false,
+    theme: true,
     style: {
       fontSize: '12px',
       fontFamily: undefined,
-       color: '#00000'
+      
     },
     x: {
       show: false,
@@ -77,7 +77,6 @@ export const options = {
 
 export const defaultSeries = []
 
-// Code in the series as a temporary placeholder for demonstration
 
 export const series = [
   {

@@ -83,11 +83,38 @@ export const loadbalance = async (dispatch, contracts, exchange, account, chainI
 
 }
 
-export const transferTokens = async (dispatch, token, amount, provider, exchange, action) => {
+export const transferTokens = async (dispatch, token, amount, provider, exchange, action, account, totalCAPbalance, totalmETHbalance, totalmDAIbalance, chainId) => {
 
   let transaction;
+  const amountNum = parseFloat(amount);
 
   const signer = await provider.getSigner();
+
+  if (!account) {
+    toast.error("transaction failed! Please Connect with Metamask ");
+    return;
+  }
+
+  if (token.address.toLowerCase() === config[chainId]?.CAP?.address.toLowerCase()) {
+    if (amountNum > totalCAPbalance) {
+      toast.error("Transaction failed! Insufficient CAP balance.");
+      return;
+    }
+  }
+  else if (token.address.toLowerCase() === config[chainId]?.mETH?.address.toLowerCase()) {
+    if (amountNum > totalmETHbalance) {
+      toast.error("Transaction failed! Insufficient mETH balance.");
+      return;
+    }
+  }
+  else {
+    if (amountNum > totalmDAIbalance) {
+      toast.error("Transaction failed! Insufficient mDAI balance.");
+      return;
+    }
+  }
+
+
   const amounttoTranfer = ethers.utils.parseEther(amount.toString(), 18);
   if (action === 'Deposit') {
     toast('Approval pending...', {
@@ -133,10 +160,13 @@ export const transferTokens = async (dispatch, token, amount, provider, exchange
   else {
 
     // withdraw amount
+     toast('withdraw pending...', {
+      icon: '⏳',
+    });
     transaction = await exchange.connect(signer).withdrawToken(token.address, amounttoTranfer);
     const withdrawReceipt = await transaction.wait();
     if (withdrawReceipt.status !== 1) {
-      toast.error(" withdrawReceipt  failed!")
+      toast.error(" withdraw transaction failed!")
       return;
     }
     else if (withdrawReceipt.status === 1) {
@@ -211,15 +241,15 @@ export const loadAllOrder = async (dispatch, provider, exchange) => {
 }
 
 
-export const cancelOrder=async(order,exchange,provider)=>{
+export const cancelOrder = async (order, exchange, provider) => {
 
-    const signer = await provider.getSigner();
-  let transaction =await exchange.connect(signer).cancelOrder(order.id);
-  let result=await transaction.wait();
+  const signer = await provider.getSigner();
+  let transaction = await exchange.connect(signer).cancelOrder(order.id);
+  let result = await transaction.wait();
 }
 
-export const loadFilledOrder=async(order,exchange,provider)=>{
-  const signer=await provider.getSigner();
-  let transaction=await exchange.connect(signer).fillOrder(order.id);
-  let result=await transaction.wait();
+export const loadFilledOrder = async (order, exchange, provider) => {
+  const signer = await provider.getSigner();
+  let transaction = await exchange.connect(signer).fillOrder(order.id);
+  let result = await transaction.wait();
 }

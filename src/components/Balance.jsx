@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadbalance, transferTokens } from '../hooks/LoadData';
+import toast from 'react-hot-toast';
 
 const Balance = () => {
 
@@ -26,23 +27,36 @@ const Balance = () => {
     const tokenmDai_Balance = useSelector((state) => state?.token?.tokenmDai_Balance)
     const ExchangemDai_Balance = useSelector((state) => state?.exchange?.ExchangemDai_Balance)
 
+
     const handelsubmit = (e, tokenAddress) => {
+
         e.preventDefault();
         if (tokenAddress == token_contract[0]?.contract1?.address) {
+
+            // if input ====> 0
+            if (token1Tranfer === 0) {
+                toast.error("Please enter Valid number!!");
+                return;
+            }
             if (isDeposit) {
-                transferTokens(dispatch, token_contract[0]?.contract1, token1Tranfer, providerconnection, exchange, 'Deposit')
+                transferTokens(dispatch, token_contract[0]?.contract1, token1Tranfer, providerconnection, exchange, 'Deposit', account, tokenCAP_Balance, tokenmEth_Balance, tokenmDai_Balance, chainId)
             }
             else {
-                transferTokens(dispatch, token_contract[0]?.contract1, token1Tranfer, providerconnection, exchange, 'Withdraw')
+                transferTokens(dispatch, token_contract[0]?.contract1, token1Tranfer, providerconnection, exchange, 'Withdraw', account, ExchangeCAP_Balance, ExchangemEth_Balance, ExchangemDai_Balance, chainId)
             }
             setToken1Transfer(0);
         }
         else {
+            // if input ====> 0
+            if (token2Tranfer === 0) {
+                toast.error("Please enter Valid number!!")
+                return;
+            }
             if (isDeposit) {
-                transferTokens(dispatch, token_contract[0]?.contract2, token2Tranfer, providerconnection, exchange, 'Deposit')
+                transferTokens(dispatch, token_contract[0]?.contract2, token2Tranfer, providerconnection, exchange, 'Deposit', account, tokenCAP_Balance, tokenmEth_Balance, tokenmDai_Balance, chainId)
             }
             else {
-                transferTokens(dispatch, token_contract[0]?.contract2, token2Tranfer, providerconnection, exchange, 'Withdraw')
+                transferTokens(dispatch, token_contract[0]?.contract2, token2Tranfer, providerconnection, exchange, 'Withdraw', account, ExchangeCAP_Balance, ExchangemEth_Balance, ExchangemDai_Balance, chainId)
             }
             setToken2Transfer(0);
         }

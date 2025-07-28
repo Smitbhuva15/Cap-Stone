@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import moment from 'moment'
 import config from '../config.json'
 import { getbuyorder, getchartData, getMyTradeData, getMyTransactionData, getsellorder, getTradeData } from "../Slice/ExchangeSlice";
-import {  groupBy, maxBy, minBy } from 'lodash';
+import { groupBy, maxBy, minBy } from 'lodash';
 
 
 
@@ -259,7 +259,7 @@ const decorateMyTradeOrder = (order, account, token_contract) => {
   })
 }
 
-export const seriesChart = ( dispatch,fillOrder, token_contract,chainId) => {
+export const seriesChart = (dispatch, fillOrder, token_contract, chainId) => {
   let filledOrders;
 
   // filter orders ---> mETH and mDAI
@@ -280,13 +280,13 @@ export const seriesChart = ( dispatch,fillOrder, token_contract,chainId) => {
   filledOrders = decorateOrder(filledOrders, token_contract, chainId)
 
   // Get last 2 order for final price & price change
-  let secondlastOrderPrice = filledOrders[filledOrders.length-2 ]?.tokenPrice;
-  let lastOrderPrice = filledOrders[filledOrders.length-1]?.tokenPrice;
+  let secondlastOrderPrice = filledOrders[filledOrders.length - 2]?.tokenPrice;
+  let lastOrderPrice = filledOrders[filledOrders.length - 1]?.tokenPrice;
 
 
-  dispatch( getchartData({
+  dispatch(getchartData({
     lastOrderPrice,
-    lastorderSign:lastOrderPrice>= secondlastOrderPrice ? "+" : "-",
+    lastorderSign: lastOrderPrice >= secondlastOrderPrice ? "+" : "-",
     series: [{
       data: buildGraphData(filledOrders)
     }]

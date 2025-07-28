@@ -6,22 +6,22 @@ import { options } from './PriceChart.config'
 import { seriesChart } from '../hooks/SelectOrderData';
 
 const PriceChart = () => {
-        const dispatch = useDispatch();
-    
+    const dispatch = useDispatch();
+
     const account = useSelector((state) => state?.provider?.signer)
     const token_contract = useSelector((state) => state?.token?.token_contract)
     const allFilledOrders = useSelector((state) => state?.exchange?.allFilledOrders)
     const chainId = useSelector((state) => state?.provider?.chainId)
     const ChartData = useSelector((state) => state?.exchange?.seriesChartData)
 
-  let clonedSeries = [];
+    let clonedSeries = [];
 
-if (ChartData?.series) {
-  clonedSeries = JSON.parse(JSON.stringify(ChartData.series));
-}
+    if (ChartData?.series) {
+        clonedSeries = JSON.parse(JSON.stringify(ChartData.series));
+    }
 
     useEffect(() => {
-       seriesChart( dispatch,allFilledOrders, token_contract, chainId);
+        seriesChart(dispatch, allFilledOrders, token_contract, chainId);
     }, [allFilledOrders])
 
 
@@ -32,9 +32,20 @@ if (ChartData?.series) {
 
                     <h2>{`${token_contract[0]?.symbol1}/${token_contract[0]?.symbol2}`}</h2>
 
-                    <div className='flex'>
-                        <span className='up'></span>
-                    </div>
+                 {ChartData && (
+
+            <div className='flex'>
+
+              {ChartData?.lastorderSign === '+' ? (
+                <img src='./up-arrow.svg' alt="Arrow up" />
+              ): (
+                <img src='./down-arrow.svg' alt="Arrow down" />
+              )}
+
+              <span className='up'>{ChartData?.lastOrderPrice}</span>
+            </div>
+
+          )}
 
                 </div>
             </div>

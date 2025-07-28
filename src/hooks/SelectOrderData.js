@@ -280,14 +280,13 @@ export const seriesChart = ( dispatch,fillOrder, token_contract,chainId) => {
   filledOrders = decorateOrder(filledOrders, token_contract, chainId)
 
   // Get last 2 order for final price & price change
-  let secondlastOrderPrice = filledOrders[filledOrders.length - 1]?.tokenPrice;
-  let lastOrderPrice = filledOrders[filledOrders.length - 2]?.tokenPrice;
+  let secondlastOrderPrice = filledOrders[filledOrders.length-2 ]?.tokenPrice;
+  let lastOrderPrice = filledOrders[filledOrders.length-1]?.tokenPrice;
 
- 
 
   dispatch( getchartData({
     lastOrderPrice,
-    lastorderSign: secondlastOrderPrice <= lastOrderPrice ? "+" : "-",
+    lastorderSign:lastOrderPrice>= secondlastOrderPrice ? "+" : "-",
     series: [{
       data: buildGraphData(filledOrders)
     }]

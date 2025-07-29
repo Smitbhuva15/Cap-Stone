@@ -307,13 +307,57 @@ export const loadAllOrder = async (dispatch, provider, exchange) => {
 
 export const cancelOrder = async (order, exchange, provider) => {
 
+  toast('Cancel Order pending...', {
+    icon: '⏳',
+  });
+
   const signer = await provider.getSigner();
   let transaction = await exchange.connect(signer).cancelOrder(order.id);
   let result = await transaction.wait();
+
+
+  if (result.status !== 1) {
+    toast.error("Failed to Cancel order. Please try again!")
+    return;
+  }
+  else if (result.status === 1) {
+    const event = result.events?.find(e => e.event === "Cancel");
+    if (event) {
+      toast.success('Order has been cancelled successfully.');
+    }
+    else {
+      toast.error("Failed to Cancel order. Please try again!")
+
+    }
+  }
+
 }
 
 export const loadFilledOrder = async (order, exchange, provider) => {
+
+  toast('Fill Order pending...', {
+    icon: '⏳',
+  });
+
+
   const signer = await provider.getSigner();
+  
   let transaction = await exchange.connect(signer).fillOrder(order.id);
   let result = await transaction.wait();
+
+  
+  if (result.status !== 1) {
+    toast.error("Failed to Fill order. Please try again!")
+    return;
+  }
+  else if (result.status === 1) {
+    const event = result.events?.find(e => e.event === "Trade");
+    if (event) {
+      toast.success('Order has been Filled successfully.');
+    }
+    else {
+      toast.error("Failed to Fill order. Please try again!")
+    }
+  }
+
 }

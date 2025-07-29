@@ -11,5 +11,10 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY],
       chainId: 11155111,
     },
+    holesky: {
+      url: process.env.HOLESKY_RPC_URL,
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 17000,
+    },
   },
 };

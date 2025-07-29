@@ -288,14 +288,16 @@ export const makeorder = async (dispatch, token_contract, order, provider, excha
 export const loadAllOrder = async (dispatch, provider, exchange) => {
 
   // this function get all the orders  
-  const block = await provider.getBlockNumber()
-  const OrderStream = await exchange.queryFilter('Order', 0, block)
+  const latestblock = await provider.getBlockNumber()
+const fromBlock = Math.max(latestblock - 49999, 0)
+
+const OrderStream = await exchange.queryFilter('Order', fromBlock, latestblock )
 
 
-  const CancelStream = await exchange.queryFilter('Cancel', 0, block)
+  const CancelStream = await exchange.queryFilter('Cancel', fromBlock, latestblock )
 
 
-  const tradeStream = await exchange.queryFilter('Trade', 0, block)
+  const tradeStream = await exchange.queryFilter('Trade', fromBlock, latestblock )
 
   OrderStream.map(order => dispatch(getallOrders(order.args)))
   CancelStream.map(order => dispatch(getallCancelOrders(order.args)))

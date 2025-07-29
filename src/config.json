@@ -1,4 +1,3 @@
-
 {
   "31337": {
     "exchange": {
@@ -13,10 +12,10 @@
     "mDAI": {
       "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
     },
-      "explorerURL": "#"
+    "explorerURL": "#"
   },
-   "11155111": {
-     "exchange": {
+  "11155111": {
+    "exchange": {
       "address": "0xd6C0AF35De04ab1625242f9687f51Bfe08706E19"
     },
     "CAP": {
@@ -28,7 +27,22 @@
     "mDAI": {
       "address": "0xF78d517715D55762266c13Cc1B74D589ba7C514E"
     },
-   "explorerURL": "https://sepolia.etherscan.io/"
+    "explorerURL": "https://sepolia.etherscan.io/"
+  },
+   "17000": {
+    "exchange": {
+      "address": "0x0b39730b323ddc33C738D4708018924160e254A7"
+    },
+    "CAP": {
+      "address": "0x009c94c0F306a05E5409739c8b037448E8F7d6D3"
+    },
+    "mETH": {
+      "address": "0x1e8c87b338aE7153d3f8e312425dE1D594835eEd"
+    },
+    "mDAI": {
+      "address": "0x31E565d3eeA006a361173e0b65ccfF35C3852185"
+    },
+    "explorerURL": "https://holesky.etherscan.io/"
   }
- 
+
 }

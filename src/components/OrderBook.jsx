@@ -20,7 +20,8 @@ const OrderBook = () => {
     const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
     const provider = useSelector((state) => state?.provider?.providerconnection)
 
-
+   console.log(buyOrder)
+   console.log(sellOrder)
 
     useEffect(() => {
         SelectOrderData(dispatch, token_contract, orders, allCancelOrders, allFilledOrders, chainId);

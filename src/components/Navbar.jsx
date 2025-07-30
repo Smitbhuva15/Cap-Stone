@@ -28,8 +28,8 @@ const Navbar = () => {
     return (
         <div className='exchange__header grid'>
             <div className='exchange__header--brand flex'>
-                <img src='./logo.png' className='logo' alt="Cap Logo" />
-                <h1>Cap Token Exchange</h1>
+                <img src='./cap3.png' className='logo' alt="Cap Logo" />
+                <h1 className='title'>Cap<span className='logox'>X</span>change</h1>
             </div>
             <div className='exchange__header--networks flex'>
                 <img src='./eth.svg' alt="ETH Logo" className='Eth Logo' />

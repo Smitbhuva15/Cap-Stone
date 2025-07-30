@@ -85,7 +85,7 @@ const Balance = () => {
 
             <div className='exchange__transfers--form'>
                 <div className='flex-between'>
-                    <p><small>Token</small><br /><img src='./dapp.svg' alt="Token Logo" />{token_contract[0]?.symbol1}</p>
+                    <p><small>Token</small><br /><img src='cap3.png' alt="Token Logo" className='caplogo'/>{token_contract[0]?.symbol1}</p>
                     <p><small>Wallet</small><br />{tokenCAP_Balance}</p>
                     <p><small>Exchange</small><br />{ExchangeCAP_Balance}</p>
                 </div>
@@ -101,10 +101,10 @@ const Balance = () => {
 
                     <button className='button' type='submit'>
                         {isDeposit ? (
-                            <span>Deposite</span>
+                            <span>Deposit</span>
                         )
                             : (
-                                <span>WithDraw</span>
+                                <span>Withdraw</span>
                             )}
 
                     </button>
@@ -134,7 +134,7 @@ const Balance = () => {
 
                     <button className='button' type='submit'>
                         {isDeposit ? (
-                            <span>Deposite</span>
+                            <span>Deposit</span>
                         )
                             : (
                                 <span>WithDraw</span>

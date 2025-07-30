@@ -27,7 +27,7 @@ const Market = () => {
     return (
         <div className='component exchange__markets'>
             <div className='component__header'>
-                <h2>Select Market</h2>
+                <h2 className='market'>Select Market</h2>
             </div>
 
             {

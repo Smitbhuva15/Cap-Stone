@@ -800,3 +800,29 @@ table td {
     grid-column-end: 5;
   }
 }
+
+.caplogo{
+  width: 28px;
+}
+
+
+
+.logo{
+  width: 72px;
+  
+}
+
+.market{
+  margin-top: 20px;
+}
+
+.title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+
+.logox{
+  color:var(--clr-blue) ;
+  font-size: 40px;
+}

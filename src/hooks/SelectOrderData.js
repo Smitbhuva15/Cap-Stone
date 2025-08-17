@@ -73,13 +73,15 @@ const decorateOrder = (enhancedOrders, token_contract, chainId) => {
   // Note: CAP should be considered token0, mETH is considered token1
   const addamounts = enhancedOrders.map(order => {
     if (order.tokenGive === config[chainId].mETH.address || order.tokenGive === config[chainId].mDAI.address) {
-
-      token0Amount = order.amountGive // The amount of DApp we are giving
-      token1Amount = order.amountGet // The amount of mETH we want...
+      // buy cap
+      token0Amount = order.amountGet // The amount of cap we want
+      token1Amount = order.amountGive // The amount of mETH we are giving...
     }
     else {
-      token0Amount = order.amountGet // The amount of DApp we want
-      token1Amount = order.amountGive // The amount of mETH we are giving...
+      //sell cap
+      token0Amount = order.amountGive // The amount of cap we are giving
+      token1Amount = order.amountGet // The amount of mETH we want...
+
     }
 
     // Calculate token price to 5 decimal places
@@ -89,7 +91,8 @@ const decorateOrder = (enhancedOrders, token_contract, chainId) => {
       tokenPrice = 0;
     }
     else {
-      tokenPrice = (token1Amount / token0Amount)
+      
+      tokenPrice = (token0Amount / token1Amount)
 
     }
     tokenPrice = Math.round(tokenPrice * precision) / precision

@@ -13,6 +13,7 @@ import OrderBook from './components/OrderBook'
 import PriceChart from './components/PriceChart'
 import MyTransaction from './components/MyTransaction'
 import Trade from './components/Trade'
+import Footer from './components/Footer'
 
 
 
@@ -97,6 +98,10 @@ function App() {
         </section>
 
       </main>
+      <div className='bg-[#121A29]'>
+      <Footer />
+
+      </div>
       <Toaster
         position="top-center"
         reverseOrder={false}

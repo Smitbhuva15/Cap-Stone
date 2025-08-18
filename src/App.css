@@ -1,3 +1,4 @@
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
 :root {
@@ -172,7 +173,6 @@ small {
 }
 
 .exchange__header--account {
-  background: var(--clr-secondary);
 
   position: absolute;
   top: 50%;
@@ -652,7 +652,7 @@ table td {
   }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 1200px) {
   .exchange__header--brand {
     grid-column-start: 1;
     grid-column-end: 4;
@@ -704,7 +704,7 @@ table td {
   }
 }
 
-@media screen and (min-width: 992px) {
+/* @media screen and (min-width: 992px) {
   .exchange__header--brand {
     grid-column-start: 1;
     grid-column-end: 5;
@@ -738,9 +738,9 @@ table td {
     grid-row-start: 1;
     grid-row-end: 3;
   }
-}
-
-@media screen and (min-width: 1200px) {
+} */
+/* 
+@media screen and (min-width: 1300px) {
   .exchange__header--brand {
     background: var(--clr-secondary);
   }
@@ -775,11 +775,11 @@ table td {
   .exchange__orders {
     grid-row: 3;
   }
-}
+}  */
 
-@media screen and (min-width: 1400px) {}
+/* @media screen and (min-width: 1600px) {} */
 
-@media screen and (min-width: 1600px) {
+  /* @media screen and ( min-width: 1600px) {
   .exchange__section--left {
     grid-column-start: 1;
     grid-column-end: 4;
@@ -799,7 +799,7 @@ table td {
     grid-column-start: 4;
     grid-column-end: 5;
   }
-}
+}   */
 
 .caplogo{
   width: 28px;

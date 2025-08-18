@@ -55,7 +55,7 @@ function App() {
 
     await loadAllOrder(dispatch, provider, exchange)
 
-    
+
 
   }
 
@@ -64,11 +64,14 @@ function App() {
   }, [])
 
   return (
-    <div>
+    <div className=''>
       <Navbar />
 
-      <main className='exchange grid'>
+      <main className='exchange '>
+
+
         <section className='exchange__section--left grid'>
+
 
           <Market />
 
@@ -77,6 +80,8 @@ function App() {
           <Order />
 
         </section>
+
+
         <section className='exchange__section--right grid'>
 
           <PriceChart />
@@ -87,7 +92,7 @@ function App() {
 
           <OrderBook />
 
-         
+
 
         </section>
 

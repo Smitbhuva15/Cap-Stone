@@ -25,7 +25,7 @@ const Market = () => {
     const value2 = [config[chainId]?.CAP?.address, config[chainId]?.mDAI?.address]
 
     return (
-        <div className='component exchange__markets'>
+        <div className='component exchange__markets '>
             <div className='component__header'>
                 <h2 className='market'>Select Market</h2>
             </div>

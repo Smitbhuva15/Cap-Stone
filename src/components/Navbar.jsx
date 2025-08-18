@@ -26,16 +26,16 @@ const Navbar = () => {
     }
 
     return (
-        <div className='exchange__header grid'>
+        <div className='exchange__header grid '>
             <div className='exchange__header--brand flex'>
-                <img src='./cap3.png' className='logo' alt="Cap Logo" />
-                <h1 className='title'>Cap<span className='logox'>X</span>change</h1>
+                <img src='./cap3.png' className='logo ' alt="Cap Logo" />
+                <h1 className='title '>Cap<span className=' logox'>X</span>change</h1>
             </div>
             <div className='exchange__header--networks flex'>
                 <img src='./eth.svg' alt="ETH Logo" className='Eth Logo' />
 
                 {chainId && (
-                    <select name="networks" id="networks" value={config[chainId] ? `0x${chainId.toString(16)}` : `0`} onChange={networkHandler}>
+                    <select name="networks" id="networks" value={config[chainId] ? `0x${chainId.toString(16)}` : `0`} onChange={networkHandler} className=''>
                         <option value="0" disabled>Select Network</option>
                         {/* <option value="0x7A69">Localhost</option> */}
                         {/* <option value="0x2a">Kovan</option> */}
@@ -46,13 +46,13 @@ const Navbar = () => {
                 )}
             </div>
 
-            <div className='exchange__header--account flex'>
+            <div className='exchange__header--account justify-end flex md:bg-[var(--clr-secondary)] '>
                 {
                     balance ? (
-                        <p><small>My Balance</small>{Number(balance).toFixed(4)}</p>
+                        <p className='hidden md:block'><small>My Balance</small>{Number(balance).toFixed(4)}</p>
                     )
                         : (
-                            <p><small>My Balance</small>0 ETH</p>
+                            <p className='hidden md:block'><small>My Balance</small>0 ETH</p>
                         )
                 }
 

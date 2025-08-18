@@ -67,10 +67,10 @@ function App() {
     <div className=''>
       <Navbar />
 
-      <main className='exchange '>
+      <main className='exchange bg-[#0D121D]!'>
 
 
-        <section className='exchange__section--left grid'>
+        <section className='exchange__section--left grid max-w-7xl! mx-auto! '>
 
 
           <Market />
@@ -82,7 +82,7 @@ function App() {
         </section>
 
 
-        <section className='exchange__section--right grid'>
+        <section className='exchange__section--right grid max-w-7xl! mx-auto!'>
 
           <PriceChart />
 

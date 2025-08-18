@@ -47,10 +47,10 @@ const Order = () => {
 
         <div className="component exchange__orders">
             <div className='component__header flex-between'>
-                <h2>New Order</h2>
+                <h2 className='font-bold!'>New Order</h2>
                 <div className='tabs'>
-                    <button className={`tab ${isBuy ? 'tab--active' : ""}`} onClick={() => { setIsBuy(true) }}>Buy</button>
-                    <button className={`tab ${!isBuy ? 'tab--active' : ""}`} onClick={() => { setIsBuy(false) }}>Sell</button>
+                    <button className={`tab ${isBuy ? 'tab--active' : ""} sm:w-[50px]! sm:text-lg! w-[30px]! text-xs!`} onClick={() => { setIsBuy(true) }}>Buy</button>
+                    <button className={`tab ${!isBuy ? 'tab--active' : ""} sm:w-[50px]! sm:text-lg! w-[30px]! text-xs!`} onClick={() => { setIsBuy(false) }}>Sell</button>
                 </div>
             </div>
 

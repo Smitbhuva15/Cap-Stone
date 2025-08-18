@@ -40,30 +40,30 @@ const OrderBook = () => {
     return (
         <div className="component exchange__orderbook">
             <div className='component__header flex-between'>
-                <h2>Order Book</h2>
+                <h2 className='font-bold!'>Order Book</h2>
             </div>
 
-            <div className="flex">
+            <div className="md:flex ">
                 {
 
                     !sellOrder || sellOrder?.length === 0 ? (
                         <p className="flex-center">No Sell Orders</p>
                     ) : (
-                        <table className="exchange__orderbook--sell">
-                            <caption>Selling</caption>
+                        <table className="exchange__orderbook--sell md:mb-0! mb-10!">
+                            <caption className=' '>Selling</caption>
                             <thead>
                                 <tr>
                                     <th>
                                         {token_contract[0]?.symbol1}
-                                        <img src="./sort.svg" alt="Sort" />
+                                        <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
                                     </th>
                                     <th>
                                         {token_contract[0]?.symbol1}/{token_contract[0]?.symbol2}
-                                        <img src="./sort.svg" alt="Sort" />
+                                        <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
                                     </th>
                                     <th>
                                         {token_contract[0]?.symbol2}
-                                        <img src="./sort.svg" alt="Sort" />
+                                        <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
                                     </th>
                                 </tr>
                             </thead>
@@ -98,15 +98,15 @@ const OrderBook = () => {
                             <tr>
                                 <th>
                                     {token_contract[0]?.symbol1}
-                                    <img src="./sort.svg" alt="Sort" />
+                                    <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
                                 </th>
                                 <th>
                                     {token_contract[0]?.symbol1}/{token_contract[0]?.symbol2}
-                                    <img src="./sort.svg" alt="Sort" />
+                                    <img src="./sort.svg" alt="Sort" className='md:block! hidden!' />
                                 </th>
                                 <th>
                                     {token_contract[0]?.symbol2}
-                                    <img src="./sort.svg" alt="Sort" />
+                                    <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
                                 </th>
                             </tr>
                         </thead>

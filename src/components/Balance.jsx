@@ -74,10 +74,10 @@ const Balance = () => {
 
         <div className='component exchange__transfers'>
             <div className='component__header flex-between'>
-                <h2>Balance</h2>
+                <h2  className='font-bold!'>Balance</h2>
                 <div className='tabs'>
-                    <button className={`tab ${isDeposit ? 'tab--active' : ''}`} onClick={() => { setIsDeposit(true) }}>Deposit</button>
-                    <button className={`tab ${!isDeposit ? 'tab--active' : ''}`} onClick={() => { setIsDeposit(false) }}>Withdraw</button>
+                    <button className={`tab ${isDeposit ? 'tab--active' : ''} sm:w-[100px]! sm:text-lg! w-[30px]! text-xs!`} onClick={() => { setIsDeposit(true) }}>Deposit</button>
+                    <button className={`tab ${!isDeposit ? 'tab--active' : ''} sm:w-[100px]! sm:text-lg! w-[30px]! text-xs!`} onClick={() => { setIsDeposit(false) }}>Withdraw</button>
                 </div>
             </div>
 

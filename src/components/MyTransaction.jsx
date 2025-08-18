@@ -44,16 +44,17 @@ const MyTransaction = () => {
     {isTransaction ? (
       <div>
         <div className="component__header flex-between">
-          <h2>My Orders</h2>
-          <div className="tabs">
+          <h2  className='font-bold!'>My Orders</h2>
+          <div className="tabs ">
             <button
-              className={`tab ${isTransaction ? 'tab--active' : ''}`}
+              className={`tab ${isTransaction ? 'tab--active' : ''} sm:w-[50px]! sm:text-md! w-[30px]! text-xs!`}
               onClick={() => setIsTransaction(true)}
+              
             >
               Orders
             </button>
             <button
-              className={`tab ${!isTransaction ? 'tab--active' : ''}`}
+              className={`tab ${!isTransaction ? 'tab--active' : ''} sm:w-[50px]! sm:text-md! w-[30px]! text-xs!`}
               onClick={() => setIsTransaction(false)}
             >
               Trades
@@ -69,11 +70,11 @@ const MyTransaction = () => {
               <tr>
                 <th>
                   {token_contract[0]?.symbol1}
-                  <img src="./sort.svg" alt="Sort" />
+                  <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
                 </th>
                 <th>
                   {token_contract[0]?.symbol1}/{token_contract[0]?.symbol2}
-                  <img src="./sort.svg" alt="Sort" />
+                  <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
                 </th>
                 <th></th>
               </tr>
@@ -87,8 +88,9 @@ const MyTransaction = () => {
                   <td>{order.tokenPrice}</td>
                   <td>
                     <button
-                      className="button--sm"
+                      className="button--sm sm:text-sm text-xs!"
                       onClick={() => handelCancelOrder(order)}
+                      
                     >
                       Cancel
                     </button>
@@ -102,16 +104,16 @@ const MyTransaction = () => {
     ) : (
       <div>
         <div className="component__header flex-between">
-          <h2>My Transactions</h2>
+          <h2 className='font-bold!'>My Transactions</h2>
           <div className="tabs">
             <button
-              className={`tab ${isTransaction ? 'tab--active' : ''}`}
+              className={`tab ${isTransaction ? 'tab--active' : ''}  sm:w-[50px]! sm:text-md! w-[30px]! text-xs!`}
               onClick={() => setIsTransaction(true)}
             >
               Orders
             </button>
             <button
-              className={`tab ${!isTransaction ? 'tab--active' : ''}`}
+              className={`tab ${!isTransaction ? 'tab--active' : ''}  sm:w-[50px]! sm:text-md! w-[30px]! text-xs!`}
               onClick={() => setIsTransaction(false)}
             >
               Trades
@@ -127,15 +129,15 @@ const MyTransaction = () => {
               <tr>
                 <th>
                   Time
-                  <img src="./sort.svg" alt="Sort" />
+                  <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
                 </th>
                 <th>
                   {token_contract[0]?.symbol1}
-                  <img src="./sort.svg" alt="Sort" />
+                  <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
                 </th>
                 <th>
                   {token_contract[0]?.symbol1}/{token_contract[0]?.symbol2}
-                  <img src="./sort.svg" alt="Sort" />
+                  <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
                 </th>
               </tr>
             </thead>

@@ -18,7 +18,7 @@ const Trade = () => {
     return (
         <div className="component exchange__trades">
             <div className='component__header flex-between'>
-                <h2>Trades</h2>
+                <h2 className='font-bold!'>Trades</h2>
             </div>
 
 
@@ -27,9 +27,9 @@ const Trade = () => {
             ) : (<table>
                 <thead>
                     <tr>
-                        <th>Time<img src='./sort.svg' alt="Sort" /></th>
-                        <th>{token_contract[0]?.symbol1}<img src='./sort.svg' alt="Sort" /></th>
-                        <th>{token_contract[0]?.symbol1}/{token_contract[0]?.symbol2}<img src='./sort.svg' alt="Sort" /></th>
+                        <th>Time<img src='./sort.svg' alt="Sort" className='md:block! hidden!'/></th>
+                        <th>{token_contract[0]?.symbol1}<img src='./sort.svg' alt="Sort" className='md:block! hidden!'/></th>
+                        <th>{token_contract[0]?.symbol1}/{token_contract[0]?.symbol2}<img src='./sort.svg' alt="Sort" className='md:block! hidden!'/></th>
                     </tr>
                 </thead>
                 <tbody>

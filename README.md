@@ -45,3 +45,29 @@
    
    <br>   
 
+##  Tech Stack
+
+### 🔹 Frontend
+- **React.js** → Component-based UI framework  
+- **Tailwind CSS** → Utility-first styling for modern responsive design  
+- **React Redux** → Global state management for balances, orders, and trades  
+- **Ethers.js** → Blockchain interaction (connect wallet, call contract functions)  
+
+### 🔹 Smart Contracts
+- **Solidity** → Powers the decentralized backend logic of CapXchange  
+
+### 🔹 Blockchain Development
+- **Hardhat** → Development framework for compiling, deploying, and debugging contracts  
+- **Chai** → Assertion library for writing unit & integration tests  
+
+
+<br>
+
+## ✨ Created By
+
+**Smit Bhuva**  
+ Web3 Developer | Solidity | Full Stack Developer  
+
+- GitHub: [Smitbhuva15](https://github.com/Smitbhuva15)  
+- LinkedIn: [Smit Bhuva](https://www.linkedin.com/in/smit-bhuva-1007ba314/)  
+- 📧 Email: bhuvasmit1507@gmail.com  

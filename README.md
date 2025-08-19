@@ -63,6 +63,23 @@
 
 <br>
 
+## Website Preview
+
+<p align="center">
+  <img src="public/capxchange1.png"  alt="website demo"  width="1000" height="600"/>
+</p>
+
+
+<p align="center">
+  <img src="public/capxchange2.png"  alt="website demo"  width="1000" height="600"/>
+</p>
+
+
+<p align="center">
+  <img src="public/capxchange3.png" alt="website demo"  width="1000" height="600"/>
+</p>
+
+
 ## ✨ Created By
 
 **Smit Bhuva**  

@@ -66,11 +66,15 @@ const Order = () => {
 
 
                 <input
-                    type="text"
+                    type="number"
                     id='amount'
                     placeholder='0.0000'
                     value={amount === 0 ? '' : amount}
                     onChange={(e) => { setAmount(e.target.value) }}
+                    className='  appearance-none 
+                      [&::-webkit-outer-spin-button]:appearance-none 
+                      [&::-webkit-inner-spin-button]:appearance-none 
+                      [&::-moz-appearance]:textfield'
                 />
 
                 {
@@ -84,11 +88,15 @@ const Order = () => {
 
 
                 <input
-                    type="text"
+                    type="number"
                     id='price'
                     placeholder='0.0000'
                     value={price === 0 ? '' : price}
                     onChange={(e) => { setPrice(e.target.value) }}
+                    className='  appearance-none 
+                      [&::-webkit-outer-spin-button]:appearance-none 
+                      [&::-webkit-inner-spin-button]:appearance-none 
+                      [&::-moz-appearance]:textfield'
                 />
 
                 <button className='button button--filled' type='submit'>

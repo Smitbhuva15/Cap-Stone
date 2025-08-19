@@ -93,11 +93,17 @@ const Balance = () => {
                 <form onSubmit={(e) => handelsubmit(e, token_contract[0]?.contract1?.address)}>
                     <label htmlFor="1"></label>
                     <input
-                        type="text"
+                        type="number"
                         id='token1'
                         placeholder='0.0000'
                         value={token1Tranfer === 0 ? '' : token1Tranfer}
-                        onChange={(e) => { setToken1Transfer(e.target.value) }} />
+                        onChange={(e) => { setToken1Transfer(e.target.value) }}
+
+                        className='  appearance-none 
+                      [&::-webkit-outer-spin-button]:appearance-none 
+                      [&::-webkit-inner-spin-button]:appearance-none 
+                      [&::-moz-appearance]:textfield'
+                         />
 
                     <button className='button' type='submit'>
                         {isDeposit ? (
@@ -125,11 +131,15 @@ const Balance = () => {
                 <form onSubmit={(e) => { handelsubmit(e, token_contract[0]?.contract2?.address) }}>
                     <label htmlFor="token2"></label>
                     <input
-                        type="text"
+                        type="number"
                         id='token2'
                         placeholder='0.0000'
                         value={token2Tranfer === 0 ? '' : token2Tranfer}
                         onChange={(e) => { setToken2Transfer(e.target.value) }}
+                        className='  appearance-none 
+                      [&::-webkit-outer-spin-button]:appearance-none 
+                      [&::-webkit-inner-spin-button]:appearance-none 
+                      [&::-moz-appearance]:textfield'
                     />
 
                     <button className='button' type='submit'>

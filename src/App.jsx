@@ -14,6 +14,7 @@ import PriceChart from './components/PriceChart'
 import MyTransaction from './components/MyTransaction'
 import Trade from './components/Trade'
 import Footer from './components/Footer'
+import Banner2 from './components/Banner2'
 
 
 
@@ -21,6 +22,9 @@ import Footer from './components/Footer'
 function App() {
 
   const dispatch = useDispatch();
+      const account = useSelector((state) => state?.provider?.signer)
+  
+    console.log(account,"???????????????????????");
 
   const loadBlockchain = async () => {
 
@@ -67,8 +71,9 @@ function App() {
   return (
     <div className=''>
       <Navbar />
-
-      <main className='exchange bg-[#0D121D]!'>
+     {
+      account?(
+        <main className='exchange bg-[#0D121D]!'>
 
 
         <section className='exchange__section--left grid max-w-7xl! mx-auto! '>
@@ -98,6 +103,18 @@ function App() {
         </section>
 
       </main>
+      ):(
+        <div className='bg-black'>
+           <Banner2 
+       title={'Connect Your Wallet'}
+       model={''}
+       
+       />
+          </div>
+      
+      )
+     }
+      
       <div className='bg-[#121A29]'>
       <Footer />
 

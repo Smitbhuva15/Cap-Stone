@@ -50,7 +50,7 @@
 ### 🔹 Frontend
 - **React.js** → Component-based UI framework  
 - **Tailwind CSS** → Utility-first styling for modern responsive design  
-- **React Redux** → Global state management for balances, orders, and trades  
+- **Redux toolkit** → Global state management for balances, orders, and trades  
 - **Ethers.js** → Blockchain interaction (connect wallet, call contract functions)  
 
 ### 🔹 Smart Contracts

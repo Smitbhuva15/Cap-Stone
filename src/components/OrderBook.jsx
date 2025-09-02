@@ -4,10 +4,13 @@ import { useEffect } from 'react'
 import SelectOrderData from '../hooks/SelectOrderData';
 import { loadAllOrder, loadbalance, loadFilledOrder } from '../hooks/LoadData';
 import toast from 'react-hot-toast';
+import { useActiveAccount } from 'thirdweb/react';
 
 const OrderBook = () => {
 
     const dispatch = useDispatch();
+    const Account = useActiveAccount();
+    const account = Account?.address;
 
     const orders = useSelector((state) => state?.exchange?.allOrders)
     const token_contract = useSelector((state) => state?.token?.token_contract)
@@ -16,12 +19,9 @@ const OrderBook = () => {
     const sellOrder = useSelector((state) => state?.exchange?.sellorder)
     const allCancelOrders = useSelector((state) => state?.exchange?.allCancelOrders)
     const allFilledOrders = useSelector((state) => state?.exchange?.allFilledOrders)
-    const account = useSelector((state) => state?.provider?.signer)
     const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
     const provider = useSelector((state) => state?.provider?.providerconnection)
 
-   console.log(buyOrder)
-   console.log(sellOrder)
 
     useEffect(() => {
         SelectOrderData(dispatch, token_contract, orders, allCancelOrders, allFilledOrders, chainId);
@@ -47,7 +47,7 @@ const OrderBook = () => {
                 {
 
                     !sellOrder || sellOrder?.length === 0 ? (
-                        <p className="flex-center">No Sell Orders</p>
+                        <p className="flex-center ">No Sell Orders</p>
                     ) : (
                         <table className="exchange__orderbook--sell md:mb-0! mb-10!">
                             <caption className=' '>Selling</caption>
@@ -55,15 +55,15 @@ const OrderBook = () => {
                                 <tr>
                                     <th>
                                         {token_contract[0]?.symbol1}
-                                        <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
+                                        <img src="./sort.svg" alt="Sort" className='md:block! hidden!' />
                                     </th>
                                     <th>
                                         {token_contract[0]?.symbol1}/{token_contract[0]?.symbol2}
-                                        <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
+                                        <img src="./sort.svg" alt="Sort" className='md:block! hidden!' />
                                     </th>
                                     <th>
                                         {token_contract[0]?.symbol2}
-                                        <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
+                                        <img src="./sort.svg" alt="Sort" className='md:block! hidden!' />
                                     </th>
                                 </tr>
                             </thead>
@@ -98,7 +98,7 @@ const OrderBook = () => {
                             <tr>
                                 <th>
                                     {token_contract[0]?.symbol1}
-                                    <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
+                                    <img src="./sort.svg" alt="Sort" className='md:block! hidden!' />
                                 </th>
                                 <th>
                                     {token_contract[0]?.symbol1}/{token_contract[0]?.symbol2}
@@ -106,7 +106,7 @@ const OrderBook = () => {
                                 </th>
                                 <th>
                                     {token_contract[0]?.symbol2}
-                                    <img src="./sort.svg" alt="Sort" className='md:block! hidden!'/>
+                                    <img src="./sort.svg" alt="Sort" className='md:block! hidden!' />
                                 </th>
                             </tr>
                         </thead>

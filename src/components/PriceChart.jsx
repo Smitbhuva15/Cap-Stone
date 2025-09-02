@@ -4,11 +4,13 @@ import Banner from '../components/Banner'
 import Chart from 'react-apexcharts';
 import { options } from './PriceChart.config'
 import { seriesChart } from '../hooks/SelectOrderData';
+import { useActiveAccount } from 'thirdweb/react';
 
 const PriceChart = () => {
     const dispatch = useDispatch();
-
-    const account = useSelector((state) => state?.provider?.signer)
+    const Account = useActiveAccount();
+    const account = Account?.address;
+    
     const token_contract = useSelector((state) => state?.token?.token_contract)
     const allFilledOrders = useSelector((state) => state?.exchange?.allFilledOrders)
     const chainId = useSelector((state) => state?.provider?.chainId)
@@ -32,20 +34,20 @@ const PriceChart = () => {
 
                     <h2>{`${token_contract[0]?.symbol1}/${token_contract[0]?.symbol2}`}</h2>
 
-                 {ChartData && (
+                    {ChartData && (
 
-            <div className='flex'>
+                        <div className='flex'>
 
-              {ChartData?.lastorderSign === '+' ? (
-                <img src='./up-arrow.svg' alt="Arrow up" />
-              ): (
-                <img src='./down-arrow.svg' alt="Arrow down" />
-              )}
+                            {ChartData?.lastorderSign === '+' ? (
+                                <img src='./up-arrow.svg' alt="Arrow up" />
+                            ) : (
+                                <img src='./down-arrow.svg' alt="Arrow down" />
+                            )}
 
-              <span className='up'>{ChartData?.lastOrderPrice}</span>
-            </div>
+                            <span className='up'>{ChartData?.lastOrderPrice}</span>
+                        </div>
 
-          )}
+                    )}
 
                 </div>
             </div>

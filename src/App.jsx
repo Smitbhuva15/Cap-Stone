@@ -2,8 +2,8 @@
 import { useEffect } from 'react'
 import './App.css'
 import config from './config.json'
-import { useDispatch, useSelector } from 'react-redux'
-import { loadAccount, loadAllOrder, loadChainId, loadcontract, loadExhange, loadProvider } from './hooks/LoadData'
+import { useDispatch } from 'react-redux'
+import { loadAllOrder, loadChainId, loadcontract, loadExhange, loadProvider } from './hooks/LoadData'
 import Navbar from './components/Navbar'
 import Market from './components/Market'
 import Balance from './components/Balance'
@@ -15,6 +15,7 @@ import MyTransaction from './components/MyTransaction'
 import Trade from './components/Trade'
 import Footer from './components/Footer'
 import Banner2 from './components/Banner2'
+import { useActiveAccount } from 'thirdweb/react'
 
 
 
@@ -22,9 +23,9 @@ import Banner2 from './components/Banner2'
 function App() {
 
   const dispatch = useDispatch();
-      const account = useSelector((state) => state?.provider?.signer)
-  
-    console.log(account,"???????????????????????");
+  const Account = useActiveAccount();
+  const account = Account?.address;
+
 
   const loadBlockchain = async () => {
 
@@ -38,13 +39,6 @@ function App() {
     window.ethereum.on('chainChanged', () => {
       window.location.reload();
     })
-
-    //fetch current account and balance from metamask when changed
-    window.ethereum.on('accountsChanged', () => {
-      loadAccount(dispatch, provider);
-    })
-
-
 
     const CAPaddress = config[chainId].CAP.address;
     const mEthaddress = config[chainId].mETH.address;
@@ -71,52 +65,52 @@ function App() {
   return (
     <div className=''>
       <Navbar />
-     {
-      account?(
-        <main className='exchange bg-[#0D121D]!'>
+      {
+        account ? (
+          <main className='exchange bg-[#0D121D]!'>
 
 
-        <section className='exchange__section--left grid max-w-7xl! mx-auto! '>
+            <section className='exchange__section--left grid max-w-7xl! mx-auto! '>
 
 
-          <Market />
+              <Market />
 
-          <Balance />
+              <Balance />
 
-          <Order />
+              <Order />
 
-        </section>
-
-
-        <section className='exchange__section--right grid max-w-7xl! mx-auto!'>
-
-          <PriceChart />
-
-          <MyTransaction />
-
-          <Trade />
-
-          <OrderBook />
+            </section>
 
 
+            <section className='exchange__section--right grid max-w-7xl! mx-auto!'>
 
-        </section>
+              <PriceChart />
 
-      </main>
-      ):(
-        <div className='bg-black'>
-           <Banner2 
-       title={'Connect Your Wallet'}
-       model={''}
-       
-       />
+              <MyTransaction />
+
+              <Trade />
+
+              <OrderBook />
+
+
+
+            </section>
+
+          </main>
+        ) : (
+          <div className='bg-black'>
+            <Banner2
+              title={'Connect Your Wallet'}
+              model={''}
+
+            />
           </div>
-      
-      )
-     }
-      
+
+        )
+      }
+
       <div className='bg-[#121A29]'>
-      <Footer />
+        <Footer />
 
       </div>
       <Toaster

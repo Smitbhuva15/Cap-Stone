@@ -16,6 +16,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
+    "@thirdweb-dev/react": "^4.9.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.0.0",
@@ -33,6 +34,7 @@
     "redux-thunk": "^2.4.1",
     "reselect": "^4.1.5",
     "tailwind-merge": "^3.3.1",
+    "thirdweb": "^5.105.40",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {

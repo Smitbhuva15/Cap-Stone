@@ -3,17 +3,19 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadbalance, transferTokens } from '../hooks/LoadData';
 import toast from 'react-hot-toast';
+import { useActiveAccount } from 'thirdweb/react';
 
 const Balance = () => {
 
     const dispatch = useDispatch();
+     const Account=useActiveAccount();
+     const account=Account?.address;
     const [token1Tranfer, setToken1Transfer] = useState(0);
     const [token2Tranfer, setToken2Transfer] = useState(0);
     const [isDeposit, setIsDeposit] = useState(true);
 
     const token_contract = useSelector((state) => state?.token?.token_contract)
     const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
-    const account = useSelector((state) => state?.provider?.signer)
     const chainId = useSelector((state) => state?.provider?.chainId)
     const event = useSelector((state) => state?.exchange?.event)
 

@@ -288,21 +288,16 @@ export const loadAllOrder = async (dispatch, provider, exchange) => {
 
   // this function get all the orders  
   const latestblock = await provider.getBlockNumber()
-const fromBlock = Math.max(latestblock - 49999, 0)
 
-const OrderStream = await exchange.queryFilter('Order', fromBlock, latestblock )
+  const OrderStream = await exchange.queryFilter('Order', 0, latestblock)
 
+  const CancelStream = await exchange.queryFilter('Cancel', 0, latestblock)
 
-  const CancelStream = await exchange.queryFilter('Cancel', fromBlock, latestblock )
-
-
-  const tradeStream = await exchange.queryFilter('Trade', fromBlock, latestblock )
+  const tradeStream = await exchange.queryFilter('Trade', 0, latestblock)
 
   OrderStream.map(order => dispatch(getallOrders(order.args)))
   CancelStream.map(order => dispatch(getallCancelOrders(order.args)))
   tradeStream.map(order => dispatch(getallFilledOrders(order.args)))
-
-
 }
 
 
@@ -342,11 +337,11 @@ export const loadFilledOrder = async (order, exchange, provider) => {
 
 
   const signer = await provider.getSigner();
-  
+
   let transaction = await exchange.connect(signer).fillOrder(order.id);
   let result = await transaction.wait();
 
-  
+
   if (result.status !== 1) {
     toast.error("Failed to Fill order. Please try again!")
     return;

@@ -2,14 +2,16 @@ import React, { useState } from 'react'
 import { loadAllOrder, makeorder } from '../hooks/LoadData';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
+import { useActiveAccount } from 'thirdweb/react';
 
 const Order = () => {
     const dispatch = useDispatch();
+    const Account = useActiveAccount();
+    const account = Account?.address;
 
     const [amount, setAmount] = useState(0);
     const [price, setPrice] = useState(0);
     const [isBuy, setIsBuy] = useState(true);
-    const account = useSelector((state) => state?.provider?.signer)
     const token_contract = useSelector((state) => state?.token?.token_contract)
     const exchange = useSelector((state) => state?.exchange?.Exchange_contract)
     const providerconnection = useSelector((state) => state?.provider?.providerconnection)

@@ -22,9 +22,8 @@ const Order = () => {
 
     const handelBuy = async (e) => {
         e.preventDefault();
-
         if (amount == 0 || price == 0) {
-            toast.error("Please enter Valid number!!");
+            toast.error("Please enter Valid number");
             return;
         }
         await makeorder(dispatch, token_contract, { amount, price }, providerconnection, exchange, 'Buy', account, ExchangeCAP_Balance, ExchangemEth_Balance, ExchangemDai_Balance, chainId)
@@ -36,8 +35,8 @@ const Order = () => {
     const handelSell = async (e) => {
         e.preventDefault();
 
-        if (amount === 0 || price === 0) {
-            toast.error("Please enter Valid number!!");
+        if (amount == 0 || price == 0) {
+            toast.error("Please enter Valid number");
             return;
         }
         await makeorder(dispatch, token_contract, { amount, price }, providerconnection, exchange, 'Sell', account, ExchangeCAP_Balance, ExchangemEth_Balance, ExchangemDai_Balance, chainId)

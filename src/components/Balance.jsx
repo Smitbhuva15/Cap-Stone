@@ -37,7 +37,7 @@ const Balance = () => {
 
             // if input ====> 0
             if (token1Tranfer == 0) {
-                toast.error("Please enter Valid number!!");
+                toast.error("Please enter Valid number");
                 return;
             }
             if (isDeposit) {
@@ -51,7 +51,7 @@ const Balance = () => {
         else {
             // if input ====> 0
             if (token2Tranfer == 0) {
-                toast.error("Please enter Valid number!!")
+                toast.error("Please enter Valid number")
                 return;
             }
             if (isDeposit) {

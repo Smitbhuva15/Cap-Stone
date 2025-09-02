@@ -47,9 +47,9 @@ const OrderBook = () => {
                 {
 
                     !sellOrder || sellOrder?.length === 0 ? (
-                        <p className="flex-center ">No Sell Orders</p>
+                        <p className="flex-center mb-24!">No Sell Orders</p>
                     ) : (
-                        <table className="exchange__orderbook--sell md:mb-0! mb-10!">
+                        <table className="exchange__orderbook--sell md:mb-0! mb-10! h-[10vh]!">
                             <caption className=' '>Selling</caption>
                             <thead>
                                 <tr>
@@ -90,9 +90,9 @@ const OrderBook = () => {
                 <div className='divider'></div>
 
                 {!buyOrder || buyOrder?.length === 0 ? (
-                    <p className="flex-center">No Buy Orders</p>
+                    <p className="flex-center mb-24!">No Buy Orders</p>
                 )
-                    : (<table className='exchange__orderbook--buy'>
+                    : (<table className='exchange__orderbook--buy h-[10vh]! '>
                         <caption>Buying</caption>
                         <thead>
                             <tr>

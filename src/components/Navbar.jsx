@@ -1,8 +1,7 @@
 import { createThirdwebClient } from "thirdweb";
 import { ConnectButton} from "thirdweb/react";
-import { mainnet, sepolia } from "thirdweb/chains";
+import { sepolia } from "thirdweb/chains";
 import { createWallet } from "thirdweb/wallets";
-
 
 
 const client = createThirdwebClient({ clientId: import.meta.env.VITE_CLIENT_ID });
@@ -38,7 +37,7 @@ const Navbar = () => {
                         createWallet("com.coinbase.wallet"),
                         createWallet("me.rainbow"),
                     ]}
-                     chains={[sepolia, mainnet]}
+                     chains={[sepolia]}
                 />
 
             </div>
